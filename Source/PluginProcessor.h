@@ -58,10 +58,11 @@ public:
     void reset() override;
 
     juce::File root, savedFile;
+    juce::dsp::Convolution irLoader;
+
 private:
 
     juce::dsp::ProcessSpec spec;
-    juce::dsp::Convolution irLoader;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GuitarAmpBasicAudioProcessor)
