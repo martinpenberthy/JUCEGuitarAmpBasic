@@ -19,15 +19,38 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout())
 #endif
 {
-
+    variableTree = {
+        "Variables", {},
+        {
+            { "Group", {{"name", "IR Vars"}},
+                {
+                    {"Parameter", {{"id", "file1"}, {"value", "/"}}},
+                    {"Parameter", {{"id", "root"}, {"value", "/"}}}
+                }
+            }
+        }
+    };
 }
 
 GuitarAmpBasicAudioProcessor::~GuitarAmpBasicAudioProcessor()
 {
 }
+
+juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor::createParameterLayout()
+{
+    std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
+    
+    return {params.begin(), params.end()};
+}
+
+void GuitarAmpBasicAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
+{
+    
+}
+
 
 //==============================================================================
 const juce::String GuitarAmpBasicAudioProcessor::getName() const
@@ -101,6 +124,11 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     
     irLoader.reset();
     irLoader.prepare(spec);
+    
+    if(savedFile.existsAsFile())
+    {
+        irLoader.loadImpulseResponse(savedFile, juce::dsp::Convolution::Stereo::yes,juce::dsp::Convolution::Trim::yes, 0);
+    }
 }
 
 void GuitarAmpBasicAudioProcessor::releaseResources()
@@ -177,15 +205,25 @@ juce::AudioProcessorEditor* GuitarAmpBasicAudioProcessor::createEditor()
 //==============================================================================
 void GuitarAmpBasicAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    treeState.state.appendChild(variableTree, nullptr);
+    juce::MemoryOutputStream stream(destData, false);
+    treeState.state.writeToStream(stream);
 }
 
 void GuitarAmpBasicAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    auto tree = juce::ValueTree::readFromData(data, size_t(sizeInBytes));
+    variableTree = tree.getChildWithName("Variables");
+    
+    if(tree.isValid())
+    {
+        treeState.state = tree;
+        
+        savedFile = juce::File(variableTree.getProperty("file1"));
+        root = juce::File(variableTree.getProperty("root"));
+        
+        
+    }
 }
 
 //==============================================================================
