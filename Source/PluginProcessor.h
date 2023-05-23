@@ -57,14 +57,12 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     void reset() override;
 
+    juce::File root, savedFile;
 private:
-    enum
-    {
-        convolutionIndex // [2]
-    };
 
-    juce::dsp::ProcessorChain<juce::dsp::Convolution> processorChain;
-
+    juce::dsp::ProcessSpec spec;
+    juce::dsp::Convolution irLoader;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GuitarAmpBasicAudioProcessor)
 };
