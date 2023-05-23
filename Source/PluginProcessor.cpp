@@ -222,7 +222,7 @@ void GuitarAmpBasicAudioProcessor::setStateInformation (const void* data, int si
         savedFile = juce::File(variableTree.getProperty("file1"));
         root = juce::File(variableTree.getProperty("root"));
         
-        
+        irLoader.loadImpulseResponse(savedFile, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
     }
 }
 
