@@ -22,19 +22,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
                        )
 #endif
 {
-    auto dir = juce::File::getCurrentWorkingDirectory();
 
-    int numTries = 0;
-
-    while (! dir.getChildFile ("Audio Files").exists() && numTries++ < 15)
-        dir = dir.getParentDirectory();
-
-    auto& convolution = processorChain.template get<convolutionIndex>();    // [5]
-
-    convolution.loadImpulseResponse (dir.getChildFile ("Audio Files").getChildFile ("cassette_recorder.wav"),
-                                     juce::dsp::Convolution::Stereo::yes,
-                                     juce::dsp::Convolution::Trim::no,
-                                     1024);           
 }
 
 GuitarAmpBasicAudioProcessor::~GuitarAmpBasicAudioProcessor()
@@ -106,12 +94,13 @@ void GuitarAmpBasicAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    juce::dsp::ProcessSpec spec;
+
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
     
-    processorChain.prepare(spec);
+    irLoader.reset();
+    irLoader.prepare(spec);
 }
 
 void GuitarAmpBasicAudioProcessor::releaseResources()
@@ -162,13 +151,15 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         buffer.clear (i, 0, buffer.getNumSamples());
 
     juce::dsp::AudioBlock<float> block (buffer);
-    processorChain.process(juce::dsp::ProcessContextReplacing<float>(block));
+    
+    if(irLoader.getCurrentIRSize() > 0)
+        irLoader.process(juce::dsp::ProcessContextReplacing<float>(block));
     
 }
 
 void GuitarAmpBasicAudioProcessor::reset()
 {
-    processorChain.reset(); // [3]
+    irLoader.reset(); // [3]
 }
 
 
