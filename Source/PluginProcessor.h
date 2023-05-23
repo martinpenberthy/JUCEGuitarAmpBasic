@@ -13,7 +13,7 @@
 //==============================================================================
 /**
 */
-class GuitarAmpBasicAudioProcessor  : public juce::AudioProcessor
+class GuitarAmpBasicAudioProcessor  : public juce::AudioProcessor, public juce::AudioProcessorValueTreeState::Listener
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
@@ -57,13 +57,19 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     void reset() override;
 
+    juce::AudioProcessorValueTreeState treeState;
+    juce::ValueTree variableTree;
+    
     juce::File root, savedFile;
     juce::dsp::Convolution irLoader;
+    
 
 private:
 
     juce::dsp::ProcessSpec spec;
     
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    void parameterChanged(const juce::String& parameterID, float newValue) override;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GuitarAmpBasicAudioProcessor)
 };

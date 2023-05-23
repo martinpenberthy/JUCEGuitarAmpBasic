@@ -26,6 +26,8 @@ public:
 
 private:
     juce::TextButton loadButton;
+    juce::Label irName;
+    
     std::unique_ptr<juce::FileChooser> fileChooser;
     
     // This reference is provided as a quick way for your editor to
