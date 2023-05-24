@@ -43,6 +43,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 {
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
     
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN", "PreGain", -96.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("POSTGAIN", "PostGain", -96.0f, 48.0f, 0.0f));
+    
     return {params.begin(), params.end()};
 }
 
@@ -117,11 +120,28 @@ void GuitarAmpBasicAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
     
+    //Set up waveshaper chain
+    auto &waveshaper = processorChain.get<waveshaperIndex>();
+
+    waveshaper.functionToUse = [](float x)
+    {
+        return x / (std::abs(x) + 1);
+    };
+    //waveshapeFunctionCurrent = "x/abs(x)+1";
+    //waveshapeFunction = "x/abs(x)+1";
+
+    auto &preGain = processorChain.get<preGainIndex>();
+    preGain.setGainDecibels(0.0f);
+    
+    auto &postGain = processorChain.get<postGainIndex>();
+    postGain.setGainDecibels(0.0f);
+    
+    processorChain.prepare(spec);
+
     irLoader.reset();
     irLoader.prepare(spec);
     
@@ -130,6 +150,8 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
         irLoader.loadImpulseResponse(savedFile, juce::dsp::Convolution::Stereo::yes,juce::dsp::Convolution::Trim::yes, 0);
     }
 }
+
+
 
 void GuitarAmpBasicAudioProcessor::releaseResources()
 {
@@ -178,15 +200,29 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    //Process waveshaper chain
+    auto& preGain = processorChain.get<preGainIndex>();
+    preGain.setGainDecibels(preGainVal);
+    
+    auto& postGain = processorChain.get<postGainIndex>();
+    postGain.setGainDecibels(postGainVal);
+    
     juce::dsp::AudioBlock<float> block (buffer);
+    processorChain.process(juce::dsp::ProcessContextReplacing<float>(block));
+    
+    
+    //Process convolver
+    juce::dsp::AudioBlock<float> block2 (buffer);
     
     if(irLoader.getCurrentIRSize() > 0)
-        irLoader.process(juce::dsp::ProcessContextReplacing<float>(block));
+        irLoader.process(juce::dsp::ProcessContextReplacing<float>(block2));
+    
     
 }
 
 void GuitarAmpBasicAudioProcessor::reset()
 {
+    processorChain.reset();
     irLoader.reset(); // [3]
 }
 
