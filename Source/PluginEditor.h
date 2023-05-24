@@ -30,6 +30,14 @@ private:
     
     std::unique_ptr<juce::FileChooser> fileChooser;
     
+    juce::Slider sliderPreGain;//Pregain slider
+    juce::Label labelPreGain; //Pregain label
+    
+    juce::Slider sliderPostGain;//Pregain slider
+    juce::Label labelPostGain; //Pregain label
+    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPostGain;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     GuitarAmpBasicAudioProcessor& audioProcessor;
