@@ -23,6 +23,8 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void modeMenuChanged();
 
 private:
     juce::TextButton loadButton;
@@ -39,9 +41,15 @@ private:
     juce::Slider sliderPreEQ;//PreEQ slider
     juce::Label labelPreEQ; //PreEQ label
     
+    juce::Label labelWaveshapeType;//Label for menu
+    juce::ComboBox waveshapeType; //Menu selecting waveshaping function
+    
+    
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPostGain;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreEQ;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboAttachmentWaveshapeType;
+
 
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.

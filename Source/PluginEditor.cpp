@@ -111,11 +111,30 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     
     
+    addAndMakeVisible(waveshapeType);
+
+    labelWaveshapeType.attachToComponent(&waveshapeType, false);
+    labelWaveshapeType.setColour(juce::Label::textColourId, juce::Colours::white);
+    labelWaveshapeType.setText("Dist Type", juce::dontSendNotification);
+    waveshapeType.addItem("Tanh", 1);
+    waveshapeType.addItem("Hardclip", 2);
+    waveshapeType.addItem("x/abs(x)+1", 3);
+    waveshapeType.addItem("Atan", 4);
+    waveshapeType.addItem("HalfRect", 5);
+    waveshapeType.addItem("Amp1", 6);
+    waveshapeType.onChange = [this]{modeMenuChanged();};
+    waveshapeType.setSelectedId(1);
+    
+    
+    
+    
     sliderAttachmentPreGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN", sliderPreGain);
     
     sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "POSTGAIN", sliderPostGain);
     
     sliderAttachmentPreEQ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREEQ", sliderPreEQ);
+    
+    comboAttachmentWaveshapeType = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, "TYPE", waveshapeType);
 }
 
 GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
@@ -148,6 +167,35 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     sliderPreGain.setBounds(getWidth()/2 - 50, getHeight()/2 - 150, 150, 150);
     sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 150, 150, 150);
     
-    
+    waveshapeType.setBounds(getWidth()/2, getHeight()/2 - 175, 100, 25);
+
+}
+
+void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()
+{
+    switch (waveshapeType.getSelectedId())
+    {
+        case 1:
+            audioProcessor.waveshapeFunction = "Tanh";
+            break;
+        case 2:
+            audioProcessor.waveshapeFunction = "Hardclip";
+            break;
+        case 3:
+            audioProcessor.waveshapeFunction = "x/abs(x)+1";
+            break;
+        case 4:
+            audioProcessor.waveshapeFunction = "Atan";
+            break;
+        case 5:
+            audioProcessor.waveshapeFunction = "HalfRect";
+            break;
+        case 6:
+            audioProcessor.waveshapeFunction = "Amp1";
+            break;
+        default:
+            audioProcessor.waveshapeFunction = "Tanh";
+            break;
+    }
 }
     

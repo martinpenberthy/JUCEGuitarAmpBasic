@@ -52,6 +52,8 @@ public:
     const juce::String getProgramName (int index) override;
     void changeProgramName (int index, const juce::String& newName) override;
 
+    void setFunctionToUse(std::string func);
+    
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
@@ -62,14 +64,16 @@ public:
     juce::AudioProcessorValueTreeState treeState;
     juce::ValueTree variableTree;
     
+    std::string waveshapeFunction;
+    std::string waveshapeFunctionCurrent;
+    
     float preGainVal {0.0f};
     float postGainVal {0.0f};
     float preEQVal {5.0f};
     juce::dsp::LadderFilterMode filterMode;
 
     
-    std::string waveshapeFunction;
-    std::string waveshapeFunctionCurrent;
+
     
     juce::File root, savedFile;
     juce::dsp::Convolution irLoader;
