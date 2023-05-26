@@ -89,6 +89,9 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
         audioProcessor.postGainVal = sliderPostGain.getValue();
     };
     
+    
+    addAndMakeVisible(sliderPreEQ);
+    
     sliderPreEQ.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPreEQ.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderPreEQ.setDoubleClickReturnValue(true, 0.0f);
