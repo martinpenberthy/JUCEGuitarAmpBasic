@@ -64,7 +64,9 @@ public:
     
     float preGainVal {0.0f};
     float postGainVal {0.0f};
-    float preEQVal {0.0f};
+    float preEQVal {5.0f};
+    juce::dsp::LadderFilterMode filterMode;
+
     
     std::string waveshapeFunction;
     std::string waveshapeFunctionCurrent;
@@ -74,12 +76,13 @@ public:
 private:
     enum
     {
+        preEQIndex,
         preGainIndex,
         waveshaperIndex,
         postGainIndex
     };
     
-    juce::dsp::ProcessorChain<juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::Gain<float>> processorChain;
+    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::Gain<float>> processorChain;
     juce::dsp::ProcessSpec spec;
     
 
