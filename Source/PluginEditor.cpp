@@ -44,7 +44,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
                 audioProcessor.irLoader.reset();
                 audioProcessor.irLoader.loadImpulseResponse(audioProcessor.savedFile, juce::dsp::Convolution::Stereo::yes,
                                                             juce::dsp::Convolution::Trim::yes, 0);
-                irName.setText(result.getFileName(), juce::dontSendNotification);
+                //irName.setText(result.getFileName(), juce::dontSendNotification);
             }
         });
     };

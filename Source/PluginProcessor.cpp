@@ -128,8 +128,9 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     auto &waveshaper = processorChain.get<waveshaperIndex>();
 
     waveshaper.functionToUse = [](float x)
-    {
-        return x / (std::abs(x) + 1);
+    {   
+        float param = 0.9f;
+        return (x * (std::abs(x) + param) / (x * x + (param - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
     };
     //waveshapeFunctionCurrent = "x/abs(x)+1";
     //waveshapeFunction = "x/abs(x)+1";
