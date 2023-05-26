@@ -89,10 +89,30 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
         audioProcessor.postGainVal = sliderPostGain.getValue();
     };
     
+    sliderPreEQ.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    sliderPreEQ.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
+    sliderPreEQ.setDoubleClickReturnValue(true, 0.0f);
+    sliderPreEQ.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderPreEQ.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderPreEQ.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
+    sliderPreEQ.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderPreEQ.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    labelPreEQ.attachToComponent(&sliderPreEQ, false);
+    labelPreEQ.setText("PreEQ(dB)", juce::dontSendNotification);
+    
+    sliderPreEQ.onValueChange = [this]()
+    {
+        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
+        audioProcessor.preEQVal = sliderPreEQ.getValue();
+    };
+    
+    
     
     sliderAttachmentPreGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN", sliderPreGain);
     
     sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "POSTGAIN", sliderPostGain);
+    
+    sliderAttachmentPreEQ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREEQ", sliderPreEQ);
 }
 
 GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
@@ -119,8 +139,12 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     
     loadButton.setBounds(btnX, btnY, btnWidth, btnHeight);
     irName.setBounds(loadButton.getX() + loadButton.getWidth(), btnY, btnWidth * 2, btnHeight);
-    sliderPreGain.setBounds(getWidth()/2 - 100, getHeight()/2 - 150, 150, 150);
-    sliderPostGain.setBounds(getWidth()/2 + 50, getHeight()/2 - 150, 150, 150);
+    
+    
+    sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 150, 150, 150);
+    sliderPreGain.setBounds(getWidth()/2 - 50, getHeight()/2 - 150, 150, 150);
+    sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 150, 150, 150);
+    
     
 }
     
