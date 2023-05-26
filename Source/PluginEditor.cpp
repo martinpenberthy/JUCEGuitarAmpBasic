@@ -159,13 +159,15 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     const auto btnWidth = getWidth() * 0.15f;
     const auto btnHeight = getHeight() * 0.25f;
     
+    
+    
     loadButton.setBounds(btnX, btnY, btnWidth, btnHeight);
     irName.setBounds(loadButton.getX() + loadButton.getWidth(), btnY, btnWidth * 2, btnHeight);
     
     
-    sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 150, 150, 150);
-    sliderPreGain.setBounds(getWidth()/2 - 50, getHeight()/2 - 150, 150, 150);
-    sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 150, 150, 150);
+    sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 125, 125, 125);
+    sliderPreGain.setBounds(getWidth()/2 - 50, getHeight()/2 - 125, 125, 125);
+    sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, 125, 125);
     
     waveshapeType.setBounds(getWidth()/2, getHeight()/2 - 175, 100, 25);
 
@@ -193,6 +195,7 @@ void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()
         case 6:
             audioProcessor.waveshapeFunction = "Amp1";
             break;
+            
         default:
             audioProcessor.waveshapeFunction = "Tanh";
             break;
