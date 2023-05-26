@@ -45,7 +45,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN", "PreGain", -96.0f, 48.0f, 0.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("POSTGAIN", "PostGain", -96.0f, 48.0f, 0.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREQ", "PreEQ", -12.0f, 12.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREQ", "PreEQ", 1.0f, 10.0f, 5.0f));
 
     return {params.begin(), params.end()};
 }
@@ -125,24 +125,32 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
     
-    //Set up waveshaper chain
+    //Set up waveshaper
     auto &waveshaper = processorChain.get<waveshaperIndex>();
 
     waveshaper.functionToUse = [](float x)
     {
         return x / (std::abs(x) + 1);
     };
-    //waveshapeFunctionCurrent = "x/abs(x)+1";
-    //waveshapeFunction = "x/abs(x)+1";
 
+    //Set up pre and post gain
     auto &preGain = processorChain.get<preGainIndex>();
     preGain.setGainDecibels(0.0f);
     
     auto &postGain = processorChain.get<postGainIndex>();
     postGain.setGainDecibels(0.0f);
     
+    //Set up PreEQ
+    auto &preEQ = processorChain.get<preEQIndex>();
+    preEQ.setMode(juce::dsp::LadderFilterMode::LPF12);
+    preEQ.setResonance(0.2);
+    preEQ.setCutoffFrequencyHz(5000.0f);
+    preEQ.setDrive(1.0f);
+    
     processorChain.prepare(spec);
 
+    
+    //Prepare convolution
     irLoader.reset();
     irLoader.prepare(spec);
     
@@ -201,13 +209,17 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    //Process waveshaper chain
+    //Set values for gains and low pass frequency
     auto& preGain = processorChain.get<preGainIndex>();
     preGain.setGainDecibels(preGainVal);
     
     auto& postGain = processorChain.get<postGainIndex>();
     postGain.setGainDecibels(postGainVal);
     
+    auto &preEQ = processorChain.get<preEQIndex>();
+    preEQ.setCutoffFrequencyHz(preEQVal * 1000.0f);
+    
+    //Process waveshaper chain
     juce::dsp::AudioBlock<float> block (buffer);
     processorChain.process(juce::dsp::ProcessContextReplacing<float>(block));
     
