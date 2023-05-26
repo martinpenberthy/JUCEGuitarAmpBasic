@@ -45,11 +45,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN", "PreGain", -96.0f, 48.0f, 0.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("POSTGAIN", "PostGain", -96.0f, 48.0f, 0.0f));
-<<<<<<< HEAD
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREEQ", "PreEQ", -12.0f, 12.0f, 0.0f));
-=======
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREQ", "PreEQ", 1.0f, 10.0f, 5.0f));
->>>>>>> macbranch
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREEqQ", "PreEQ", 1.0f, 10.0f, 5.0f));
+
 
     return {params.begin(), params.end()};
 }
