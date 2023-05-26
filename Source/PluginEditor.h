@@ -36,8 +36,12 @@ private:
     juce::Slider sliderPostGain;//Pregain slider
     juce::Label labelPostGain; //Pregain label
     
+    juce::Slider sliderPreEQ;//PreEQ slider
+    juce::Label labelPreEQ; //PreEQ label
+    
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPostGain;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreEQ;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     GuitarAmpBasicAudioProcessor& audioProcessor;

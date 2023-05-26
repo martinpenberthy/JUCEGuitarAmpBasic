@@ -64,6 +64,7 @@ public:
     
     float preGainVal {0.0f};
     float postGainVal {0.0f};
+    float preEQVal {0.0f};
     
     std::string waveshapeFunction;
     std::string waveshapeFunctionCurrent;
