@@ -15,7 +15,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (600, 400);
+    setSize (500, 600);
     
     addAndMakeVisible(loadButton);
     loadButton.setButtonText("Load IR");
@@ -147,7 +147,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     waveshapeType1.addItem("HalfRect", 5);
     waveshapeType1.addItem("Amp1", 6);
     waveshapeType1.onChange = [this]{modeMenuChanged();};
-    waveshapeType1.setSelectedId(1);
+    //waveshapeType1.setSelectedId(1);
     
     
     
@@ -180,12 +180,12 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     // subcomponents in your editor..
     
     const auto btnX = getWidth() * 0.35f;
-    const auto btnY = getHeight() * 0.5f;
+    const auto btnY = getHeight() * 0.65f;
     const auto btnWidth = getWidth() * 0.15f;
     const auto btnHeight = getHeight() * 0.25f;
     
     
-    
+    waveshapeType1.setBounds(getWidth()/2, getHeight()/2 - 175, 100, 25);
     loadButton.setBounds(btnX, btnY + 110, btnWidth, btnHeight);
     irName.setBounds(loadButton.getX() + loadButton.getWidth(), btnY, btnWidth * 2, btnHeight);
     
@@ -198,7 +198,7 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     
     sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, 125, 125);
     
-    waveshapeType1.setBounds(getWidth()/2, getHeight()/2 - 175, 100, 25);
+
 
 }
 
