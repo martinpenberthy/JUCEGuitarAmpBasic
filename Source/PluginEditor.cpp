@@ -52,25 +52,49 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(irName);
     
-    addAndMakeVisible(sliderPreGain);
-    addAndMakeVisible(sliderPostGain);
+    addAndMakeVisible(sliderPreGain1);
     
-    sliderPreGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderPreGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderPreGain.setDoubleClickReturnValue(true, 0.0f);
-    sliderPreGain.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderPreGain.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreGain.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderPreGain.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
-    labelPreGain.attachToComponent(&sliderPreGain, false);
-    labelPreGain.setText("PreGain(dB)", juce::dontSendNotification);
     
-    sliderPreGain.onValueChange = [this]()
+    sliderPreGain1.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    sliderPreGain1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
+    sliderPreGain1.setDoubleClickReturnValue(true, 0.0f);
+    sliderPreGain1.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderPreGain1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderPreGain1.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
+    sliderPreGain1.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderPreGain1.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    labelPreGain1.attachToComponent(&sliderPreGain1, false);
+    labelPreGain1.setText("PreGain(dB)", juce::dontSendNotification);
+    
+    sliderPreGain1.onValueChange = [this]()
     {
         //audioProcessor.volume.setTargetValue(sliderGain.getValue());
-        audioProcessor.preGainVal = sliderPreGain.getValue();
+        audioProcessor.preGainVal1 = sliderPreGain1.getValue();
     };
+    
+    addAndMakeVisible(sliderPreGain2);
+    
+    
+    sliderPreGain2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    sliderPreGain2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
+    sliderPreGain2.setDoubleClickReturnValue(true, 0.0f);
+    sliderPreGain2.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderPreGain2.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderPreGain2.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
+    sliderPreGain2.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderPreGain2.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    labelPreGain2.attachToComponent(&sliderPreGain2, false);
+    labelPreGain2.setText("PreGain(dB)", juce::dontSendNotification);
+    
+    sliderPreGain2.onValueChange = [this]()
+    {
+        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
+        audioProcessor.preGainVal2 = sliderPreGain2.getValue();
+    };
+    
+    
+    
+    addAndMakeVisible(sliderPostGain);
     
     sliderPostGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPostGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
@@ -111,30 +135,31 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     
     
-    addAndMakeVisible(waveshapeType);
+    addAndMakeVisible(waveshapeType1);
 
-    labelWaveshapeType.attachToComponent(&waveshapeType, false);
-    labelWaveshapeType.setColour(juce::Label::textColourId, juce::Colours::white);
-    labelWaveshapeType.setText("Dist Type", juce::dontSendNotification);
-    waveshapeType.addItem("Tanh", 1);
-    waveshapeType.addItem("Hardclip", 2);
-    waveshapeType.addItem("x/abs(x)+1", 3);
-    waveshapeType.addItem("Atan", 4);
-    waveshapeType.addItem("HalfRect", 5);
-    waveshapeType.addItem("Amp1", 6);
-    waveshapeType.onChange = [this]{modeMenuChanged();};
-    waveshapeType.setSelectedId(1);
+    labelWaveshapeType1.attachToComponent(&waveshapeType1, false);
+    labelWaveshapeType1.setColour(juce::Label::textColourId, juce::Colours::white);
+    labelWaveshapeType1.setText("Dist Type", juce::dontSendNotification);
+    waveshapeType1.addItem("Tanh", 1);
+    waveshapeType1.addItem("Hardclip", 2);
+    waveshapeType1.addItem("x/abs(x)+1", 3);
+    waveshapeType1.addItem("Atan", 4);
+    waveshapeType1.addItem("HalfRect", 5);
+    waveshapeType1.addItem("Amp1", 6);
+    waveshapeType1.onChange = [this]{modeMenuChanged();};
+    waveshapeType1.setSelectedId(1);
     
     
     
     
-    sliderAttachmentPreGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN", sliderPreGain);
+    sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
+    sliderAttachmentPreGain2 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN2", sliderPreGain2);
     
     sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "POSTGAIN", sliderPostGain);
     
     sliderAttachmentPreEQ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREEQ", sliderPreEQ);
     
-    comboAttachmentWaveshapeType = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, "TYPE", waveshapeType);
+    comboAttachmentWaveshapeType1 = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, "TYPE", waveshapeType1);
 }
 
 GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
@@ -161,21 +186,25 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     
     
     
-    loadButton.setBounds(btnX, btnY, btnWidth, btnHeight);
+    loadButton.setBounds(btnX, btnY + 110, btnWidth, btnHeight);
     irName.setBounds(loadButton.getX() + loadButton.getWidth(), btnY, btnWidth * 2, btnHeight);
     
     
     sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 125, 125, 125);
-    sliderPreGain.setBounds(getWidth()/2 - 50, getHeight()/2 - 125, 125, 125);
+    sliderPreGain1.setBounds(getWidth()/2 - 50, getHeight()/2 - 125, 125, 125);
+    sliderPreGain2.setBounds(getWidth()/2 - 50, getHeight()/2 - 50, 125, 125);
+
+    
+    
     sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, 125, 125);
     
-    waveshapeType.setBounds(getWidth()/2, getHeight()/2 - 175, 100, 25);
+    waveshapeType1.setBounds(getWidth()/2, getHeight()/2 - 175, 100, 25);
 
 }
 
 void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()
 {
-    switch (waveshapeType.getSelectedId())
+    switch (waveshapeType1.getSelectedId())
     {
         case 1:
             audioProcessor.waveshapeFunction = "Tanh";

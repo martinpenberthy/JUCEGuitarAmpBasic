@@ -32,8 +32,11 @@ private:
     
     std::unique_ptr<juce::FileChooser> fileChooser;
     
-    juce::Slider sliderPreGain;//Pregain slider
-    juce::Label labelPreGain; //Pregain label
+    juce::Slider sliderPreGain1;//Pregain slider
+    juce::Label labelPreGain1; //Pregain label
+    
+    juce::Slider sliderPreGain2;//Pregain slider
+    juce::Label labelPreGain2; //Pregain label
     
     juce::Slider sliderPostGain;//Pregain slider
     juce::Label labelPostGain; //Pregain label
@@ -41,14 +44,16 @@ private:
     juce::Slider sliderPreEQ;//PreEQ slider
     juce::Label labelPreEQ; //PreEQ label
     
-    juce::Label labelWaveshapeType;//Label for menu
-    juce::ComboBox waveshapeType; //Menu selecting waveshaping function
+    juce::Label labelWaveshapeType1;//Label for menu
+    juce::ComboBox waveshapeType1; //Menu selecting waveshaping function
     
     
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain1;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain2;
+    
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPostGain;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreEQ;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboAttachmentWaveshapeType;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboAttachmentWaveshapeType1;
 
 
     // This reference is provided as a quick way for your editor to

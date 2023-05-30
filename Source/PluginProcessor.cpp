@@ -43,11 +43,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 {
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
     
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN", "PreGain", -96.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN1", "PreGain1", -96.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN2", "PreGain2", -96.0f, 48.0f, 0.0f));
+    
     params.push_back(std::make_unique<juce::AudioParameterFloat>("POSTGAIN", "PostGain", -96.0f, 48.0f, 0.0f));
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREEQ", "PreEQ", 1.0f, 10.0f, 5.0f));
-    params.push_back(std::make_unique<juce::AudioParameterChoice>("TYPE", "Type",
+    params.push_back(std::make_unique<juce::AudioParameterChoice>("TYPE1", "Type1",
                                                             juce::StringArray {"Tanh", "Hardclip", "x/abs(x)+1", "Atan", "HalfRect",
                                                                                 "Amp1"},
                                                             1));
@@ -130,19 +132,29 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     spec.numChannels = getTotalNumOutputChannels();
     
     //Set up waveshaper
-    auto &waveshaper = processorChain.get<waveshaperIndex>();
+    auto &waveshaper1 = processorChain.get<waveshaperIndex1>();
 
-    waveshaper.functionToUse = [](float x)
+    waveshaper1.functionToUse = [](float x)
     {   
         return x / (std::abs(x) + 1);
-        //return std::pow(x, 3.0f);
     };
     waveshapeFunctionCurrent = "x/abs(x)+1";
     waveshapeFunction = "x/abs(x)+1";
 
+    auto &waveshaper2 = processorChain.get<waveshaperIndex2>();
+    waveshaper2.functionToUse = [](float x)
+    {
+        return x / (std::abs(x) + 1);
+    };
+    
+    
+        
     //Set up pre and post gain
-    auto &preGain = processorChain.get<preGainIndex>();
-    preGain.setGainDecibels(0.0f);
+    auto &preGain1 = processorChain.get<preGainIndex1>();
+    preGain1.setGainDecibels(0.0f);
+    
+    auto &preGain2 = processorChain.get<preGainIndex2>();
+    preGain2.setGainDecibels(0.0f);
     
     auto &postGain = processorChain.get<postGainIndex>();
     postGain.setGainDecibels(0.0f);
@@ -221,13 +233,18 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     if(waveshapeFunction != waveshapeFunctionCurrent)
         setFunctionToUse(waveshapeFunction);
     
-    //Set values for gains and low pass frequency
-    auto& preGain = processorChain.get<preGainIndex>();
-    preGain.setGainDecibels(preGainVal);
+    //Set values for pre gains
+    auto &preGain1 = processorChain.get<preGainIndex1>();
+    preGain1.setGainDecibels(preGainVal1);
     
-    auto& postGain = processorChain.get<postGainIndex>();
+    auto &preGain2 = processorChain.get<preGainIndex2>();
+    preGain2.setGainDecibels(preGainVal2);
+    
+    //Set value for post gain
+    auto &postGain = processorChain.get<postGainIndex>();
     postGain.setGainDecibels(postGainVal);
     
+    //Set value for pre EQ
     auto &preEQ = processorChain.get<preEQIndex>();
     preEQ.setCutoffFrequencyHz(preEQVal * 1000.0f);
     
@@ -290,11 +307,11 @@ void GuitarAmpBasicAudioProcessor::setStateInformation (const void* data, int si
 
 void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
 {
-    auto &waveshaper = processorChain.get<waveshaperIndex>();
+    auto &waveshaper1 = processorChain.get<waveshaperIndex1>();
     
     if(func == "Tanh")
     {
-        waveshaper.functionToUse = [](float x)
+        waveshaper1.functionToUse = [](float x)
         {
             return std::tanh (x);
         };
@@ -302,7 +319,7 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
     }
     else if(func == "x/abs(x)+1")
     {
-        waveshaper.functionToUse = [](float x)
+        waveshaper1.functionToUse = [](float x)
         {
             return x / (std::abs(x) + 1);
         };
@@ -310,7 +327,7 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
     }
     else if(func == "Hardclip")
     {
-        waveshaper.functionToUse = [](float x)
+        waveshaper1.functionToUse = [](float x)
         {
             return juce::jlimit(float (-0.1), float (0.1), x);
         };
@@ -318,7 +335,7 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
     }
     else if(func == "Atan")
     {
-        waveshaper.functionToUse = [](float x)
+        waveshaper1.functionToUse = [](float x)
         {
             return std::atan(x);
         };
@@ -326,7 +343,7 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
     }
     else if(func == "HalfRect")
     {
-        waveshaper.functionToUse = [](float x)
+        waveshaper1.functionToUse = [](float x)
         {
             if(x < 0.0f)
                 return 0.0f;
@@ -337,7 +354,7 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
     }
     else if(func == "Amp1")
     {
-        waveshaper.functionToUse = [](float x)
+        waveshaper1.functionToUse = [](float x)
         {
             float param = 0.9f;
             return (x * (std::abs(x) + param) / (x * x + (param - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
