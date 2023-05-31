@@ -22,7 +22,8 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
                        ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout())
 #endif
 {
-    variableTree = {
+    variableTree =
+    {
         "Variables", {},
         {
             { "Group", {{"name", "IR Vars"}},
@@ -43,8 +44,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 {
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
     
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN1", "PreGain1", -96.0f, 48.0f, 0.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN2", "PreGain2", -96.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN1", "PreGain1", 0.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN2", "PreGain2", 0.0f, 48.0f, 0.0f));
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>("POSTGAIN", "PostGain", -96.0f, 48.0f, 0.0f));
 
@@ -145,6 +146,7 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     waveshaper2.functionToUse = [](float x)
     {
         return x / (std::abs(x) + 1);
+        //return (x * x) / 2.0f;
     };
     
     
@@ -165,6 +167,13 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     preEQ.setResonance(0.2);
     preEQ.setCutoffFrequencyHz(5000.0f);
     preEQ.setDrive(1.0f);
+    
+    auto &lowEQ = processorChain.get<lowEQIndex>();
+    lowEQ.setMode(juce::dsp::LadderFilterMode::HPF12);
+    lowEQ.setResonance(0.1);
+    lowEQ.setCutoffFrequencyHz(300.0f);
+    lowEQ.setDrive(1.0f);
+    
     
     processorChain.prepare(spec);
 

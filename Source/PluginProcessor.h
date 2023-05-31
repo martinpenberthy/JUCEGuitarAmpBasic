@@ -86,12 +86,13 @@ private:
         preEQIndex,
         preGainIndex1,
         waveshaperIndex1,
+        lowEQIndex,
         preGainIndex2,
         waveshaperIndex2,
         postGainIndex
     };
     
-    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::Gain<float>> processorChain;
+    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::LadderFilter<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::Gain<float>> processorChain;
     juce::dsp::ProcessSpec spec;
     
 
