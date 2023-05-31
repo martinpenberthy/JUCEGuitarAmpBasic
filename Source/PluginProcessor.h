@@ -60,6 +60,7 @@ public:
     void reset() override;
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    void updateFilter();
     
     juce::AudioProcessorValueTreeState treeState;
     juce::ValueTree variableTree;
@@ -93,6 +94,8 @@ private:
     };
     
     juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::LadderFilter<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::Gain<float>> processorChain;
+    
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> filterHigh;
     juce::dsp::ProcessSpec spec;
     
 

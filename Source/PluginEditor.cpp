@@ -125,7 +125,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderPreEQ.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
     sliderPreEQ.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
     labelPreEQ.attachToComponent(&sliderPreEQ, false);
-    labelPreEQ.setText("PreEQ(dB)", juce::dontSendNotification);
+    labelPreEQ.setText("PreEQ", juce::dontSendNotification);
     
     sliderPreEQ.onValueChange = [this]()
     {
@@ -149,7 +149,18 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     waveshapeType1.onChange = [this]{modeMenuChanged();};
     //waveshapeType1.setSelectedId(1);
     
+    addAndMakeVisible(sliderFilterHighGain);
     
+    sliderFilterHighGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    sliderFilterHighGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
+    sliderFilterHighGain.setDoubleClickReturnValue(true, 0.0f);
+    sliderFilterHighGain.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderFilterHighGain.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderFilterHighGain.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
+    sliderFilterHighGain.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderFilterHighGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    labelFilterHighGain.attachToComponent(&sliderFilterHighGain, false);
+    labelFilterHighGain.setText("High)", juce::dontSendNotification);
     
     
     sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
@@ -160,6 +171,8 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderAttachmentPreEQ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREEQ", sliderPreEQ);
     
     comboAttachmentWaveshapeType1 = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, "TYPE", waveshapeType1);
+    
+    sliderAttachmentFilterHighGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "HIGH", sliderFilterHighGain);
 }
 
 GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
@@ -192,12 +205,13 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     
     sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 125, 125, 125);
     sliderPreGain1.setBounds(getWidth()/2 - 50, getHeight()/2 - 125, 125, 125);
-    sliderPreGain2.setBounds(getWidth()/2 - 50, getHeight()/2 - 50, 125, 125);
+    sliderPreGain2.setBounds(getWidth()/2 - 50, getHeight()/2, 125, 125);
 
     
     
     sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, 125, 125);
     
+    sliderFilterHighGain.setBounds(getWidth()/2 + 100, getHeight()/2, 125, 125);
 
 
 }

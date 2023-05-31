@@ -19,7 +19,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout())
+                       ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout()), filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 0.0f))
 #endif
 {
     variableTree =
@@ -50,6 +50,11 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
     params.push_back(std::make_unique<juce::AudioParameterFloat>("POSTGAIN", "PostGain", -96.0f, 48.0f, 0.0f));
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREEQ", "PreEQ", 1.0f, 10.0f, 5.0f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGH", "High", -2.0f, 2.0f, 0.0f));
+
+
+
     params.push_back(std::make_unique<juce::AudioParameterChoice>("TYPE1", "Type1",
                                                             juce::StringArray {"Tanh", "Hardclip", "x/abs(x)+1", "Atan", "HalfRect",
                                                                                 "Amp1"},
@@ -177,6 +182,8 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     
     processorChain.prepare(spec);
 
+    filterHigh.prepare(spec);
+    
     
     //Prepare convolution
     irLoader.reset();
@@ -221,6 +228,15 @@ bool GuitarAmpBasicAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
   #endif
 }
 #endif
+
+
+void GuitarAmpBasicAudioProcessor::updateFilter()
+{
+    float gain = *treeState.getRawParameterValue("HIGH");
+    
+    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 9000.0f, 0.1f, gain);
+}
+
 
 void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
@@ -268,6 +284,9 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     if(irLoader.getCurrentIRSize() > 0)
         irLoader.process(juce::dsp::ProcessContextReplacing<float>(block2));
     
+    juce::dsp::AudioBlock<float> block3 (buffer);
+    updateFilter();
+    filterHigh.process(juce::dsp::ProcessContextReplacing<float>(block3));
     
 }
 
