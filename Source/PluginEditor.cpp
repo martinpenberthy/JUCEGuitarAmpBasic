@@ -149,7 +149,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     waveshapeType1.onChange = [this]{modeMenuChanged();};
     //waveshapeType1.setSelectedId(1);
     
-    /*addAndMakeVisible(sliderFilterHighGain);
+    addAndMakeVisible(sliderFilterHighGain);
     
     sliderFilterHighGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderFilterHighGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
@@ -161,7 +161,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderFilterHighGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
     labelFilterHighGain.attachToComponent(&sliderFilterHighGain, false);
     labelFilterHighGain.setText("Highs", juce::dontSendNotification);
-    */
+    
     
     sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
     sliderAttachmentPreGain2 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN2", sliderPreGain2);
@@ -172,7 +172,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     comboAttachmentWaveshapeType1 = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, "TYPE", waveshapeType1);
     
-    //sliderAttachmentFilterHighGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "HIGH", sliderFilterHighGain);
+    sliderAttachmentFilterHighGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "HIGH", sliderFilterHighGain);
 }
 
 GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
@@ -202,18 +202,13 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     loadButton.setBounds(btnX, btnY + 110, btnWidth, btnHeight);
     irName.setBounds(loadButton.getX() + loadButton.getWidth(), btnY, btnWidth * 2, btnHeight);
     
-    
     sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 125, 125, 125);
     sliderPreGain1.setBounds(getWidth()/2 - 50, getHeight()/2 - 125, 125, 125);
     sliderPreGain2.setBounds(getWidth()/2 - 50, getHeight()/2, 125, 125);
 
-    
-    
     sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, 125, 125);
     
-    //sliderFilterHighGain.setBounds(getWidth()/2 + 100, getHeight()/2, 125, 125);
-
-
+    sliderFilterHighGain.setBounds(getWidth()/2 + 100, getHeight()/2, 125, 125);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()

@@ -74,10 +74,7 @@ public:
     
     float postGainVal {0.0f};
 
-    juce::dsp::LadderFilterMode filterMode;
-
-    
-
+    //juce::dsp::LadderFilterMode filterMode;
     
     juce::File root, savedFile;
     juce::dsp::Convolution irLoader;
@@ -90,10 +87,22 @@ private:
         lowEQIndex,
         preGainIndex2,
         waveshaperIndex2,
+        filterHighIndex,
         postGainIndex
     };
     
-    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::LadderFilter<float>, juce::dsp::Gain<float>, juce::dsp::WaveShaper<float>, juce::dsp::Gain<float>> processorChain;
+    using IIRFilter = juce::dsp::IIR::Filter<float>;
+    using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
+    
+    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>,
+                              juce::dsp::Gain<float>,
+                              juce::dsp::WaveShaper<float>,
+                              juce::dsp::LadderFilter<float>,
+                              juce::dsp::Gain<float>,
+                              juce::dsp::WaveShaper<float>,
+                              IIRFilter,
+                              //juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
+                              juce::dsp::Gain<float>> processorChain;
     
     //juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> filterHigh;
     juce::dsp::ProcessSpec spec;

@@ -179,7 +179,9 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     lowEQ.setCutoffFrequencyHz(300.0f);
     lowEQ.setDrive(1.0f);
     
-    
+    auto &filterHigh = processorChain.get<filterHighIndex>();
+    filterHigh.coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 9000.0f, 0.1f, 0.0f);
+
     processorChain.prepare(spec);
 
     //filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 0.0f))
@@ -238,6 +240,10 @@ void GuitarAmpBasicAudioProcessor::updateFilter()
     /*float gain = *treeState.getRawParameterValue("HIGH");
     
     *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 9000.0f, 0.1f, gain);*/
+    float gain = *treeState.getRawParameterValue("HIGH");
+    
+    auto &filterHigh = processorChain.get<filterHighIndex>();
+    filterHigh.coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 9000.0f, 0.1f, gain);
 }
 
 
@@ -275,6 +281,9 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     //Set value for pre EQ
     auto &preEQ = processorChain.get<preEQIndex>();
     preEQ.setCutoffFrequencyHz(preEQVal * 1000.0f);
+    
+    updateFilter();
+    
     
     //Process waveshaper chain
     juce::dsp::AudioBlock<float> block (buffer);
