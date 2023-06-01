@@ -47,8 +47,8 @@ private:
     juce::Slider sliderPreEQ;//PreEQ slider
     juce::Label labelPreEQ; //PreEQ label
 
-    juce::Slider sliderFilterHighGain;
-    juce::Label labelFilterHighGain;
+    //juce::Slider sliderFilterHighGain;
+    //juce::Label labelFilterHighGain;
     
     
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain1;
@@ -58,7 +58,7 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreEQ;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboAttachmentWaveshapeType1;
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFilterHighGain;
+    //std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFilterHighGain;
 
 
     // This reference is provided as a quick way for your editor to

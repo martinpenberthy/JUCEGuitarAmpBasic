@@ -19,7 +19,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout()), filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 0.0f))
+                       ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout())//, filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 0.0f))
 #endif
 {
     variableTree =
@@ -182,8 +182,11 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     
     processorChain.prepare(spec);
 
-    filterHigh.prepare(spec);
-    
+    //filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 0.0f))
+    /*filterHigh.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 9000.0f, 0.1f, 0.0f);
+    filterHigh.reset();
+    filterHigh.prepare(spec);*/
+
     
     //Prepare convolution
     irLoader.reset();
@@ -232,9 +235,9 @@ bool GuitarAmpBasicAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 
 void GuitarAmpBasicAudioProcessor::updateFilter()
 {
-    float gain = *treeState.getRawParameterValue("HIGH");
+    /*float gain = *treeState.getRawParameterValue("HIGH");
     
-    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 9000.0f, 0.1f, gain);
+    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 9000.0f, 0.1f, gain);*/
 }
 
 
@@ -277,6 +280,11 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     juce::dsp::AudioBlock<float> block (buffer);
     processorChain.process(juce::dsp::ProcessContextReplacing<float>(block));
     
+    //Process high filter
+    /*juce::dsp::AudioBlock<float> block3 (buffer);
+    updateFilter();
+    filterHigh.process(juce::dsp::ProcessContextReplacing<float>(block3));*/
+    
     
     //Process convolver
     juce::dsp::AudioBlock<float> block2 (buffer);
@@ -284,16 +292,15 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     if(irLoader.getCurrentIRSize() > 0)
         irLoader.process(juce::dsp::ProcessContextReplacing<float>(block2));
     
-    juce::dsp::AudioBlock<float> block3 (buffer);
-    updateFilter();
-    filterHigh.process(juce::dsp::ProcessContextReplacing<float>(block3));
     
+
 }
 
 void GuitarAmpBasicAudioProcessor::reset()
 {
     processorChain.reset();
     irLoader.reset(); // [3]
+    //filterHigh.reset();
 }
 
 
