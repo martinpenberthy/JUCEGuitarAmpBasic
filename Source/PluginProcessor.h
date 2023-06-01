@@ -88,6 +88,7 @@ private:
         preGainIndex2,
         waveshaperIndex2,
         filterHighIndex,
+        //filterHighIndexL,
         postGainIndex
     };
     
@@ -100,8 +101,9 @@ private:
                               juce::dsp::LadderFilter<float>,
                               juce::dsp::Gain<float>,
                               juce::dsp::WaveShaper<float>,
-                              IIRFilter,
-                              //juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
+                              //IIRFilter,
+                              //IIRFilter,
+                              juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
                               juce::dsp::Gain<float>> processorChain;
     
     //juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> filterHigh;
