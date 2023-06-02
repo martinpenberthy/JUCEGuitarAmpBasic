@@ -192,23 +192,37 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
     
-    const auto btnX = getWidth() * 0.35f;
+    /*const auto btnX = getWidth() * 0.35f;
     const auto btnY = getHeight() * 0.65f;
     const auto btnWidth = getWidth() * 0.15f;
     const auto btnHeight = getHeight() * 0.25f;
-    
+    int knobSize = 125;
     
     waveshapeType1.setBounds(getWidth()/2, getHeight()/2 - 175, 100, 25);
     loadButton.setBounds(btnX, btnY + 110, btnWidth, btnHeight);
     irName.setBounds(loadButton.getX() + loadButton.getWidth(), btnY, btnWidth * 2, btnHeight);
     
-    sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 125, 125, 125);
-    sliderPreGain1.setBounds(getWidth()/2 - 50, getHeight()/2 - 125, 125, 125);
-    sliderPreGain2.setBounds(getWidth()/2 - 50, getHeight()/2, 125, 125);
-
-    sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, 125, 125);
+    sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 125, knobSize, knobSize);
     
-    sliderFilterHighGain.setBounds(getWidth()/2 + 100, getHeight()/2, 125, 125);
+    sliderPreGain1.setBounds(getWidth()/2 - 50, getHeight()/2 - 125, knobSize, knobSize);
+    sliderPreGain2.setBounds(getWidth()/2 - 50, getHeight()/2, knobSize, knobSize);
+    sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, knobSize, knobSize);
+    
+    sliderFilterHighGain.setBounds(getWidth()/2 + 100, getHeight()/2, knobSize, knobSize);*/
+    int leftOffest = 40;
+    int topOffset = 40;
+    //IR load button/label
+    loadButton.setBounds(leftOffest, topOffset, 100, 25);
+    irName.setBounds(loadButton.getX(), loadButton.getY() - 20, 175, 25);
+    
+    //Waveshape menu
+    waveshapeType1.setBounds(getWidth() - (loadButton.getWidth() + leftOffest), topOffset, 100, 25);
+    
+    sliderPreEQ.setBounds(getWidth() / 2 - 50, 150, 125, 125);
+    sliderPostGain.setBounds(waveshapeType1.getX(), 150, 125, 125);
+    
+    //sliderPreGain1.setBounds(loadButton.getX() / 2, , <#int width#>, <#int height#>
+    
 }
 
 void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()

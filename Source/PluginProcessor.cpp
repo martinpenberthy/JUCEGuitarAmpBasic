@@ -136,6 +136,7 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
+    reset();
     
     //Set up waveshaper
     auto &waveshaper1 = processorChain.get<waveshaperIndex1>();
@@ -180,7 +181,7 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     lowEQ.setDrive(1.0f);
     
     auto &filterHigh = processorChain.get<filterHighIndex>();
-    filterHigh.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 5000.0f, 0.5f, 0.0f);
+    filterHigh.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 5000.0f, 0.5f, 1.0f);
     
     
     /*auto &filterHighL = processorChain.get<filterHighIndexL>();
@@ -248,20 +249,13 @@ bool GuitarAmpBasicAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 void GuitarAmpBasicAudioProcessor::updateFilter()
 {
     float gain = *treeState.getRawParameterValue("HIGH");
+    if(gain == 0.00f)
+        gain = 0.01f;
+    
     auto & filterHigh = processorChain.get<filterHighIndex>();
     *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 5000.0f, 0.5f, gain);
-    //float gain = *treeState.getRawParameterValue("HIGH");
-    
-    //auto &filterHighL = processorChain.get<filterHighIndexL>();
-    //auto &filterHighR = processorChain.get<filterHighIndexR>();
 
-    
-    //auto coefs = juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 9000.0f, 0.1f, gain);
-    //filterHighL.coefficients = *coefs;
-    //filterHighR.coefficients = *coefs;
-    //filterHigh.coefficients  = juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 9000.0f, 0.1f, gain);
 }
-
 
 void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
