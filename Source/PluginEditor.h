@@ -41,26 +41,38 @@ private:
     juce::Slider sliderPreGain2;//Pregain slider
     juce::Label labelPreGain2; //Pregain label
     
+    juce::Slider sliderPreGain3;//Pregain slider
+    juce::Label labelPreGain3; //Pregain label
+    
     juce::Slider sliderPostGain;//Postgain slider
     juce::Label labelPostGain; //Postgain label
     
     juce::Slider sliderPreEQ;//PreEQ slider
     juce::Label labelPreEQ; //PreEQ label
 
+    //Filters
     juce::Slider sliderFilterHighGain;
     juce::Label labelFilterHighGain;
     
+    juce::Slider sliderFilterMidGain;
+    juce::Label labelFilterMidGain;
+    
+    juce::Slider sliderFilterLowGain;
+    juce::Label labelFilterLowGain;
     
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain1;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain2;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain3;
+
     
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPostGain;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreEQ;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> comboAttachmentWaveshapeType1;
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFilterHighGain;
-
-
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFilterMidGain;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentFilterLowGain;
+    
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     GuitarAmpBasicAudioProcessor& audioProcessor;
