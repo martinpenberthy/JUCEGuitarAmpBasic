@@ -213,6 +213,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     comboAttachmentWaveshapeType1 = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, "TYPE", waveshapeType1);
     
     sliderAttachmentFilterHighGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "HIGH", sliderFilterHighGain);
+    
+    sliderAttachmentFilterMidGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "MID", sliderFilterMidGain);
+    
+    sliderAttachmentFilterLowGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "LOW", sliderFilterLowGain);
 }
 
 GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
@@ -267,6 +271,8 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     sliderPreGain3.setBounds(sliderPostGain.getX(), 250, knobSize, knobSize);
     
     sliderFilterLowGain.setBounds(sliderPreGain1.getX(), 400, knobSize, knobSize);
+    sliderFilterMidGain.setBounds(sliderPreGain2.getX(), 400, knobSize, knobSize);
+    sliderFilterHighGain.setBounds(sliderPreGain3.getX(), 400, knobSize, knobSize);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()

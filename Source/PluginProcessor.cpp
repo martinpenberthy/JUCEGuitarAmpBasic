@@ -51,8 +51,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREEQ", "PreEQ", 1.0f, 10.0f, 5.0f));
     
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGH", "High", 0.0f, 2.0f, 1.0f));
-
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGH", "High", 0.0f, 10.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("MID", "Mid", 0.0f, 10.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("LOW", "Low", 0.0f, 10.0f, 1.0f));
 
 
     params.push_back(std::make_unique<juce::AudioParameterChoice>("TYPE1", "Type1",
@@ -181,26 +182,17 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     lowEQ.setDrive(1.0f);
     
     auto &filterHigh = processorChain.get<filterHighIndex>();
-    filterHigh.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 5000.0f, 0.5f, 1.0f);
+    filterHigh.state = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 5000.0f, 0.1f, 1.0f);
     
+    auto &filterMid = processorChain.get<filterMidIndex>();
+    filterMid.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 500.0f, 0.1f, 1.0f);
     
-    /*auto &filterHighL = processorChain.get<filterHighIndexL>();
-    auto &filterHighR = processorChain.get<filterHighIndexR>();
-    auto coefs = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 9000.0f, 0.1f, 0.0f);
-    filterHighL.coefficients = *coefs;
-    filterHighR.coefficients = *coefs;*/
-    
-    
-    //filterHigh.coefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 9000.0f, 0.1f, 0.0f);
+    auto &filterLow = processorChain.get<filterLowIndex>();
+    filterLow.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 100.0f, 0.1f, 1.0f);
 
+    
     processorChain.prepare(spec);
 
-    //filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 0.0f))
-    /*filterHigh.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 9000.0f, 0.1f, 0.0f);
-    filterHigh.reset();
-    filterHigh.prepare(spec);*/
-
-    
     //Prepare convolution
     irLoader.reset();
     irLoader.prepare(spec);
@@ -248,13 +240,28 @@ bool GuitarAmpBasicAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 
 void GuitarAmpBasicAudioProcessor::updateFilter()
 {
-    float gain = *treeState.getRawParameterValue("HIGH");
-    if(gain == 0.00f)
-        gain = 0.01f;
+    float gainHigh = *treeState.getRawParameterValue("HIGH");
+    float gainMid = *treeState.getRawParameterValue("MID");
+    float gainLow = *treeState.getRawParameterValue("LOW");
+    
+    if(gainHigh == 0.00f)
+        gainHigh = 0.01f;
+    
+    if(gainMid == 0.00f)
+        gainMid = 0.01f;
+    
+    if(gainLow == 0.00f)
+        gainLow = 0.01f;
     
     auto & filterHigh = processorChain.get<filterHighIndex>();
-    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 5000.0f, 0.5f, gain);
+    filterHigh.state = juce::dsp::IIR::Coefficients<float>::makeHighShelf(getSampleRate(), 5000.0f, 0.1f, gainHigh);
 
+    auto &filterMid = processorChain.get<filterMidIndex>();
+    filterMid.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 500.0f, 0.1f, gainMid);
+    
+    auto &filterLow = processorChain.get<filterLowIndex>();
+    filterLow.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 100.0f, 0.1f, gainLow);
+    
 }
 
 void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
@@ -298,12 +305,6 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     //Process waveshaper chain
     juce::dsp::AudioBlock<float> block (buffer);
     processorChain.process(juce::dsp::ProcessContextReplacing<float>(block));
-    
-    //Process high filter
-    /*juce::dsp::AudioBlock<float> block3 (buffer);
-    updateFilter();
-    filterHigh.process(juce::dsp::ProcessContextReplacing<float>(block3));*/
-    
     
     //Process convolver
     juce::dsp::AudioBlock<float> block2 (buffer);
