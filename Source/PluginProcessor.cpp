@@ -51,9 +51,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREEQ", "PreEQ", 1.0f, 10.0f, 5.0f));
     
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGH", "High", 0.0f, 10.0f, 1.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("MID", "Mid", 0.0f, 10.0f, 1.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("LOW", "Low", 0.0f, 10.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGH", "High", 0.0f, 2.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("MID", "Mid", 0.0f, 2.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("LOW", "Low", 0.0f, 2.0f, 1.0f));
 
 
     params.push_back(std::make_unique<juce::AudioParameterChoice>("TYPE1", "Type1",
@@ -182,13 +182,13 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     lowEQ.setDrive(1.0f);
     
     auto &filterHigh = processorChain.get<filterHighIndex>();
-    filterHigh.state = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 5000.0f, 0.1f, 1.0f);
+    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 5000.0f, 0.6f, 1.0f);
     
     auto &filterMid = processorChain.get<filterMidIndex>();
-    filterMid.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 500.0f, 0.1f, 1.0f);
+    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 500.0f, 0.6f, 1.0f);
     
     auto &filterLow = processorChain.get<filterLowIndex>();
-    filterLow.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 100.0f, 0.1f, 1.0f);
+    *filterLow.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 100.0f, 0.6f, 1.0f);
 
     
     processorChain.prepare(spec);
@@ -254,13 +254,13 @@ void GuitarAmpBasicAudioProcessor::updateFilter()
         gainLow = 0.01f;
     
     auto & filterHigh = processorChain.get<filterHighIndex>();
-    filterHigh.state = juce::dsp::IIR::Coefficients<float>::makeHighShelf(getSampleRate(), 5000.0f, 0.1f, gainHigh);
+    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 5000.0f, 0.6f, gainHigh);
 
     auto &filterMid = processorChain.get<filterMidIndex>();
-    filterMid.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 500.0f, 0.1f, gainMid);
+    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 500.0f, 0.6f, gainMid);
     
     auto &filterLow = processorChain.get<filterLowIndex>();
-    filterLow.state = juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 100.0f, 0.1f, gainLow);
+    *filterLow.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 100.0f, 0.6f, gainLow);
     
 }
 
