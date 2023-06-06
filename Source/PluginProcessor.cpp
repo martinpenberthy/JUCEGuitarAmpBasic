@@ -142,8 +142,10 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     reset();
     
     /*juce::Value restoreWaveshapeFunction = treeState.getParameterAsValue("TYPE1");
-    setFunctionToUse(restoreWaveshapeFunction.getValue().toString().toStdString());*/
     
+    std::string restoreWaveshapeFunctionString = restoreWaveshapeFunction.getValue().toString().toStdString();
+    setFunctionToUse(restoreWaveshapeFunctionString);
+    waveshapeFunction = restoreWaveshapeFunctionString;*/
     
     //Set up waveshaper
     auto &waveshaper1 = processorChain.get<waveshaperIndex1>();
