@@ -106,6 +106,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelPreGain3.attachToComponent(&sliderPreGain3, false);
     labelPreGain3.setText("PreGain3(dB)", juce::dontSendNotification);
     
+    sliderPreGain3.onValueChange = [this]()
+    {
+        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
+        audioProcessor.preGainVal3 = sliderPreGain3.getValue();
+    };
+    
     
     addAndMakeVisible(sliderPostGain);
     
@@ -160,7 +166,22 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     waveshapeType1.addItem("HalfRect", 5);
     waveshapeType1.addItem("Amp1", 6);
     waveshapeType1.onChange = [this]{modeMenuChanged();};
-    //waveshapeType1.setSelectedId(1);
+    waveshapeType1.setSelectedId(1);
+    
+    /*if(audioProcessor.waveshapeFunctionCurrent == "Tanh")
+        waveshapeType1.setSelectedId(1);
+    else if (audioProcessor.waveshapeFunctionCurrent == "AmpTest")
+        waveshapeType1.setSelectedId(2);
+    else if(audioProcessor.waveshapeFunctionCurrent == "x/abs(x)+1")
+        waveshapeType1.setSelectedId(3);
+    else if(audioProcessor.waveshapeFunctionCurrent == "Atan")
+        waveshapeType1.setSelectedId(4);
+    else if(audioProcessor.waveshapeFunctionCurrent == "HalfRect")
+        waveshapeType1.setSelectedId(5);
+    else if(audioProcessor.waveshapeFunctionCurrent == "Amp1")
+        waveshapeType1.setSelectedId(6);*/
+    //modeMenuChanged();
+    
     
     addAndMakeVisible(sliderFilterHighGain);
     
@@ -212,6 +233,9 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
     sliderAttachmentPreGain2 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN2", sliderPreGain2);
+    
+    sliderAttachmentPreGain3 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN3", sliderPreGain3);
+    
     
     sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "POSTGAIN", sliderPostGain);
     

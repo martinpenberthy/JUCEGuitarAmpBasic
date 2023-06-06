@@ -68,11 +68,10 @@ public:
     std::string waveshapeFunction;
     std::string waveshapeFunctionCurrent;
     
-    bool waveshapeToggle;
-    
     float preEQVal {5.0f};
     float preGainVal1 {0.0f};
     float preGainVal2 {0.0f};
+    float preGainVal3 {0.0f};
     
     float postGainVal {0.0f};
 
@@ -84,11 +83,13 @@ private:
     enum
     {
         preEQIndex,
+        lowEQIndex,
         preGainIndex1,
         waveshaperIndex1,
-        lowEQIndex,
         preGainIndex2,
         waveshaperIndex2,
+        preGainIndex3,
+        waveshaperIndex3,
         filterLowIndex,
         filterMidIndex,
         filterHighIndex,
@@ -98,12 +99,14 @@ private:
     using IIRFilter = juce::dsp::IIR::Filter<float>;
     using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
     
-    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>,
-                              juce::dsp::Gain<float>,
-                              juce::dsp::WaveShaper<float>,
-                              juce::dsp::LadderFilter<float>,
-                              juce::dsp::Gain<float>,
-                              juce::dsp::WaveShaper<float>,
+    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>, //PreEQ
+                              juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>, //LowEQ
+                              juce::dsp::Gain<float>, //Pregain1
+                              juce::dsp::WaveShaper<float>, //Waveshaper1
+                              juce::dsp::Gain<float>, //Pregain2
+                              juce::dsp::WaveShaper<float>, //Waveshaper2
+                              juce::dsp::Gain<float>, //Pregain3
+                              juce::dsp::WaveShaper<float>, //Waveshaper3
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
