@@ -167,9 +167,9 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     waveshaper3.functionToUse = [](float x)
     {
         //return x;
-        //return x / (std::abs(x) + 1);
+        return x / (std::abs(x) + 1);
         //return (x * x) / 2.0f;
-        return std::atan(x);
+        //return std::atan(x);
     };
     
     //Set up pre and post gain
@@ -411,7 +411,8 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
         waveshaper1.functionToUse = [](float x)
         {
             float param = 0.9f;
-            return ((x / (std::abs(x) + param) * 1.5f ) / (x * x + (0.0f - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
+            return (x * (std::abs(x) + param) / (x * x + (param - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
+            //return ((x / (std::abs(x) + param) * 1.5f ) / (x * x + (0.0f - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
             //return std::tan(x / 1.0f);
         };
         waveshapeFunctionCurrent = "AmpTest";
