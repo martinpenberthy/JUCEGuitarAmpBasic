@@ -134,6 +134,7 @@ void GuitarAmpBasicAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    waveshapeToggle = true;
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
@@ -152,6 +153,7 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     auto &waveshaper2 = processorChain.get<waveshaperIndex2>();
     waveshaper2.functionToUse = [](float x)
     {
+        //return x;
         return x / (std::abs(x) + 1);
         //return (x * x) / 2.0f;
     };
@@ -279,6 +281,10 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    if(waveshapeToggle)
+        processorChain.setBypassed<waveshaperIndex1>(waveshapeToggle);
+    else
+        processorChain.setBypassed<waveshaperIndex1>(waveshapeToggle);
     
     
     if(waveshapeFunction != waveshapeFunctionCurrent)
@@ -380,11 +386,13 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
         };
         waveshapeFunctionCurrent = "x/abs(x)+1";
     }
-    else if(func == "Hardclip")
+    else if(func == "AmpTest")
     {
         waveshaper1.functionToUse = [](float x)
         {
-            return juce::jlimit(float (-0.1), float (0.1), x);
+            //float param = 0.9f;
+           // return (x * (std::abs(x) + param) / (x * x + (param - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
+            return std::tan(x / 1.0f);
         };
         waveshapeFunctionCurrent = "Hardclip";
     }

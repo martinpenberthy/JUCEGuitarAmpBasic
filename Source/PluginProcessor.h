@@ -68,6 +68,8 @@ public:
     std::string waveshapeFunction;
     std::string waveshapeFunctionCurrent;
     
+    bool waveshapeToggle;
+    
     float preEQVal {5.0f};
     float preGainVal1 {0.0f};
     float preGainVal2 {0.0f};

@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class GuitarAmpBasicAudioProcessorEditor  : public juce::AudioProcessorEditor
+class GuitarAmpBasicAudioProcessorEditor  : public juce::AudioProcessorEditor//, public juce::Button
 {
 public:
     GuitarAmpBasicAudioProcessorEditor (GuitarAmpBasicAudioProcessor&);
@@ -25,6 +25,7 @@ public:
     void resized() override;
     
     void modeMenuChanged();
+    //void updateToggleState(juce::Button* button, juce::String name);
 
 private:
     juce::TextButton loadButton;
@@ -59,6 +60,9 @@ private:
     
     juce::Slider sliderFilterLowGain;
     juce::Label labelFilterLowGain;
+    
+    
+    //juce::Button buttonWaveshapeToggle;
     
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain1;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain2;

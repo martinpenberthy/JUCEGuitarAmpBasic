@@ -154,7 +154,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelWaveshapeType1.setColour(juce::Label::textColourId, juce::Colours::white);
     labelWaveshapeType1.setText("Dist Type", juce::dontSendNotification);
     waveshapeType1.addItem("Tanh", 1);
-    waveshapeType1.addItem("Hardclip", 2);
+    waveshapeType1.addItem("AmpTest", 2);
     waveshapeType1.addItem("x/abs(x)+1", 3);
     waveshapeType1.addItem("Atan", 4);
     waveshapeType1.addItem("HalfRect", 5);
@@ -203,6 +203,13 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelFilterLowGain.setText("Lows", juce::dontSendNotification);
     
     
+    
+   /* addAndMakeVisible(buttonWaveshapeToggle);
+    buttonWaveshapeToggle.onClick() = [this] {
+        updateToggleState (&buttonWaveshapeToggle,   "waveshapeToggle");
+    };*/
+    
+    
     sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
     sliderAttachmentPreGain2 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN2", sliderPreGain2);
     
@@ -222,6 +229,18 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
 GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
 {
 }
+
+/*void GuitarAmpBasicAudioProcessorEditor::updateToggleState (juce::Button* button, juce::String name)
+{
+    auto state = button->getToggleState();
+
+//In our example we just post the toggle changes to the logger as they happen:
+    juce::String stateString = state ? "ON" : "OFF";
+
+    //juce::Logger::outputDebugString (name + " Button changed to " + stateString);
+}*/
+
+
 
 //==============================================================================
 void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
@@ -283,7 +302,7 @@ void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()
             audioProcessor.waveshapeFunction = "Tanh";
             break;
         case 2:
-            audioProcessor.waveshapeFunction = "Hardclip";
+            audioProcessor.waveshapeFunction = "AmpTest";
             break;
         case 3:
             audioProcessor.waveshapeFunction = "x/abs(x)+1";
