@@ -64,7 +64,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
                                                                                 "Amp1"},
                                                             1));
     return {params.begin(), params.end()};
-}   
+}
 
 void GuitarAmpBasicAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
 {
@@ -242,7 +242,7 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 5000.0f, 0.6f, 1.0f);
     
     auto &filterMid = processorChain.get<filterMidIndex>();
-    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 500.0f, 0.6f, 1.0f);
+    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 500.0f, 0.9f, 1.0f);
     
     auto &filterLow = processorChain.get<filterLowIndex>();
     *filterLow.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 100.0f, 0.6f, 1.0f);
@@ -314,10 +314,10 @@ void GuitarAmpBasicAudioProcessor::updateFilter()
     *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 5000.0f, 0.6f, gainHigh);
 
     auto &filterMid = processorChain.get<filterMidIndex>();
-    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 500.0f, 0.6f, gainMid);
+    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 500.0f, 0.9f, gainMid);
     
     auto &filterLow = processorChain.get<filterLowIndex>();
-    *filterLow.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (getSampleRate(), 100.0f, 0.6f, gainLow);
+    *filterLow.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(), 100.0f, 0.6f, gainLow);
     
 }
 
