@@ -35,6 +35,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
         }
     };
     
+    //treeState.state.addListener(*this);
 }
 
 GuitarAmpBasicAudioProcessor::~GuitarAmpBasicAudioProcessor()
@@ -52,7 +53,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
     params.push_back(std::make_unique<juce::AudioParameterFloat>("POSTGAIN", "PostGain", -96.0f, 48.0f, 0.0f));
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREEQ", "PreEQ", 1.0f, 10.0f, 5.0f));
-    
+                    
     params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGH", "High", 0.0f, 2.0f, 1.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("MID", "Mid", 0.0f, 2.0f, 1.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("LOW", "Low", 0.0f, 2.0f, 1.0f));
@@ -63,7 +64,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
                                                                                 "Amp1"},
                                                             1));
     return {params.begin(), params.end()};
-}
+}   
 
 void GuitarAmpBasicAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
 {
