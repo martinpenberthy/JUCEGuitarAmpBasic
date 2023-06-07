@@ -168,7 +168,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     waveshapeType1.onChange = [this]{modeMenuChanged();};
     //waveshapeType1.setSelectedId(1);
     
-    if(audioProcessor.waveshapeFunctionCurrent == "Tanh")
+    /*if(audioProcessor.waveshapeFunctionCurrent == "Tanh")
         waveshapeType1.setSelectedId(1);
     else if (audioProcessor.waveshapeFunctionCurrent == "AmpTest")
         waveshapeType1.setSelectedId(2);
@@ -179,7 +179,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     else if(audioProcessor.waveshapeFunctionCurrent == "HalfRect")
         waveshapeType1.setSelectedId(5);
     else if(audioProcessor.waveshapeFunctionCurrent == "Amp1")
-        waveshapeType1.setSelectedId(6);
+        waveshapeType1.setSelectedId(6);*/
     //modeMenuChanged();
     
     

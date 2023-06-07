@@ -148,13 +148,47 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     waveshapeFunction = restoreWaveshapeFunctionString;*/
     
     //Set up waveshaper
-    auto &waveshaper1 = processorChain.get<waveshaperIndex1>();
+    /*auto &waveshaper1 = processorChain.get<waveshaperIndex1>();
     waveshaper1.functionToUse = [](float x)
     {   
         return x / (std::abs(x) + 1);
     };
     waveshapeFunctionCurrent = "x/abs(x)+1";
-    waveshapeFunction = "x/abs(x)+1";
+    waveshapeFunction = "x/abs(x)+1";*/
+    
+    auto waveshapeInitFunction = treeState.getRawParameterValue("TYPE1");
+    switch((int)*waveshapeInitFunction){
+        case 1:
+            setFunctionToUse("Tanh");
+            waveshapeFunction = "Tanh";
+            break;
+        case 2:
+            setFunctionToUse("AmpTest");
+            waveshapeFunction = "AmpTest";
+            break;
+        case 3:
+            setFunctionToUse("x/abs(x)+1");
+            waveshapeFunction ="x/abs(x)+1";
+            break;
+        case 4:
+            setFunctionToUse("Atan");
+            waveshapeFunction = "Atan";
+            break;
+        case 5:
+            setFunctionToUse("HalfRect");
+            waveshapeFunction = "HalfRect";
+            break;
+        case 6:
+            setFunctionToUse("Amp1");
+            waveshapeFunction = "Amp1";
+            break;
+            
+        default:
+            setFunctionToUse("Tanh");
+            waveshapeFunction = "Tanh";
+            break;
+    }
+    
 
     auto &waveshaper2 = processorChain.get<waveshaperIndex2>();
     waveshaper2.functionToUse = [](float x)
