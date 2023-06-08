@@ -68,6 +68,8 @@ public:
     std::string waveshapeFunction;
     std::string waveshapeFunctionCurrent;
     
+    float inputGainVal {0.0f};
+    
     float preEQVal {5.0f};
     float preGainVal1 {0.0f};
     float preGainVal2 {0.0f};
@@ -82,6 +84,7 @@ public:
 private:
     enum
     {
+        inputGainIndex,
         preEQIndex,
         lowEQIndex,
         preGainIndex1,
@@ -99,7 +102,8 @@ private:
     using IIRFilter = juce::dsp::IIR::Filter<float>;
     using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
     
-    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>, //PreEQ
+    juce::dsp::ProcessorChain<juce::dsp::Gain<float>,
+                              juce::dsp::LadderFilter<float>, //PreEQ
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>, //LowEQ
                               juce::dsp::Gain<float>, //Pregain1
                               juce::dsp::WaveShaper<float>, //Waveshaper1

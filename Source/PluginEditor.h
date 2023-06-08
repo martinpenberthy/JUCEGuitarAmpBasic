@@ -36,6 +36,9 @@ private:
     juce::Label labelWaveshapeType1;//Label for menu
     juce::ComboBox waveshapeType1; //Menu selecting waveshaping function
     
+    juce::Slider sliderInputGain;
+    juce::Label labelInputGain;
+    
     juce::Slider sliderPreGain1;//Pregain slider
     juce::Label labelPreGain1; //Pregain label
     
@@ -63,6 +66,7 @@ private:
     
     
     //juce::Button buttonWaveshapeToggle;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentInputGain;
     
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain1;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> sliderAttachmentPreGain2;

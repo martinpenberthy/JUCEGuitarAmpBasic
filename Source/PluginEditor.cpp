@@ -52,8 +52,27 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(irName);
     
-    addAndMakeVisible(sliderPreGain1);
+    addAndMakeVisible(sliderInputGain);
     
+    sliderInputGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    sliderInputGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
+    sliderInputGain.setDoubleClickReturnValue(true, 0.0f);
+    sliderInputGain.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderInputGain.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderInputGain.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
+    sliderInputGain.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    sliderInputGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    labelInputGain.attachToComponent(&sliderInputGain, false);
+    labelInputGain.setText("InputGain(dB)", juce::dontSendNotification);
+    
+    sliderInputGain.onValueChange = [this]()
+    {
+        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
+        audioProcessor.inputGainVal = sliderInputGain.getValue();
+    };
+    
+    
+    addAndMakeVisible(sliderPreGain1);
     
     sliderPreGain1.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPreGain1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
@@ -73,7 +92,6 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     };
     
     addAndMakeVisible(sliderPreGain2);
-    
     
     sliderPreGain2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPreGain2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
@@ -230,8 +248,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
         updateToggleState (&buttonWaveshapeToggle,   "waveshapeToggle");
     };*/
     
+    sliderAttachmentInputGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "INPUTGAIN", sliderInputGain);
     
     sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
+    
     sliderAttachmentPreGain2 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN2", sliderPreGain2);
     
     sliderAttachmentPreGain3 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN3", sliderPreGain3);
@@ -309,9 +329,13 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     sliderPreEQ.setBounds(getWidth() / 2 - 50, 100, knobSize, knobSize);
     sliderPostGain.setBounds(waveshapeType1.getX(), 100, knobSize, knobSize);
     
+    
     sliderPreGain1.setBounds(loadButton.getX() / 2, 250, knobSize, knobSize);
     sliderPreGain2.setBounds(sliderPreEQ.getX(), 250, knobSize, knobSize);
     sliderPreGain3.setBounds(sliderPostGain.getX(), 250, knobSize, knobSize);
+    
+    sliderInputGain.setBounds(sliderPreGain1.getX(), 100, knobSize, knobSize);
+
     
     sliderFilterLowGain.setBounds(sliderPreGain1.getX(), 400, knobSize, knobSize);
     sliderFilterMidGain.setBounds(sliderPreGain2.getX(), 400, knobSize, knobSize);

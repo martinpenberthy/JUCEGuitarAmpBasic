@@ -46,6 +46,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 {
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
     
+    params.push_back(std::make_unique<juce::AudioParameterFloat>("INPUTGAIN", "InputGain", -96.0f, 48.0f, 0.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN1", "PreGain1", 0.0f, 48.0f, 0.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN2", "PreGain2", 0.0f, 48.0f, 0.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN3", "PreGain3", 0.0f, 48.0f, 0.0f));
@@ -209,6 +210,9 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
         //return std::atan(x);
     };
     
+    auto &inputGain = processorChain.get<inputGainIndex>();
+    inputGain.setGainDecibels(0.0f);
+    
     //Set up pre and post gain
     auto &preGain1 = processorChain.get<preGainIndex1>();
     preGain1.setGainDecibels(0.0f);
@@ -339,6 +343,9 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     
     if(waveshapeFunction != waveshapeFunctionCurrent)
         setFunctionToUse(waveshapeFunction);
+    
+    auto &inputGain = processorChain.get<inputGainIndex>();
+    inputGain.setGainDecibels(inputGainVal);
     
     //Set values for pre gains
     auto &preGain1 = processorChain.get<preGainIndex1>();
