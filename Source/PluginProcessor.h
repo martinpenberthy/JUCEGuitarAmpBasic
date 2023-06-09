@@ -61,6 +61,7 @@ public:
 
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     void updateFilter();
+    float getRMSValue(const int channel) const;
     
     juce::AudioProcessorValueTreeState treeState;
     juce::ValueTree variableTree;
@@ -118,7 +119,8 @@ private:
     
     //juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> filterHigh;
     juce::dsp::ProcessSpec spec;
-    
+    juce::LinearSmoothedValue<float> rmsLevel;
+
 
     void parameterChanged(const juce::String& parameterID, float newValue) override;
     //==============================================================================

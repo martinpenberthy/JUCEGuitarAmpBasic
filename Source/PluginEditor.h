@@ -10,17 +10,20 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "VerticalGradientMeter.h"
 
 //==============================================================================
 /**
 */
-class GuitarAmpBasicAudioProcessorEditor  : public juce::AudioProcessorEditor//, public juce::Button
+class GuitarAmpBasicAudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Timer
 {
 public:
     GuitarAmpBasicAudioProcessorEditor (GuitarAmpBasicAudioProcessor&);
     ~GuitarAmpBasicAudioProcessorEditor() override;
 
     //==============================================================================
+    void timerCallback() override;
+
     void paint (juce::Graphics&) override;
     void resized() override;
     
@@ -28,6 +31,9 @@ public:
     //void updateToggleState(juce::Button* button, juce::String name);
 
 private:
+    Gui::VerticalGradientMeter verticalGradientMeter;
+
+    
     juce::TextButton loadButton;
     juce::Label irName;
     

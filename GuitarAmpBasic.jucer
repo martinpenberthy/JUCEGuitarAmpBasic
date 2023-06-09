@@ -5,6 +5,8 @@
               companyName="Black Martini">
   <MAINGROUP id="TCJxXs" name="GuitarAmpBasic">
     <GROUP id="{0743106B-80D3-4CC6-3460-10808AC36CE3}" name="Source">
+      <FILE id="EZt0ic" name="VerticalGradientMeter.h" compile="0" resource="0"
+            file="Source/VerticalGradientMeter.h"/>
       <FILE id="mxnNVt" name="Convolution.h" compile="0" resource="0" file="Source/Convolution.h"/>
       <FILE id="B3Px35" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

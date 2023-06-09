@@ -11,11 +11,17 @@
 
 //==============================================================================
 GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAmpBasicAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p),
+      verticalGradientMeter([&]() {return audioProcessor.getRMSValue(0); }),
+      audioProcessor (p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (500, 600);
+    
+    
+    addAndMakeVisible(verticalGradientMeter);
+    startTimerHz(24);
     
     addAndMakeVisible(loadButton);
     loadButton.setButtonText("Load IR");
@@ -283,7 +289,12 @@ GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
 
     //juce::Logger::outputDebugString (name + " Button changed to " + stateString);
 }*/
-
+void GuitarAmpBasicAudioProcessorEditor::timerCallback()
+{
+    verticalGradientMeter.setLevel(audioProcessor.getRMSValue(0));
+    
+    verticalGradientMeter.repaint();
+}
 
 
 //==============================================================================
@@ -316,6 +327,9 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, knobSize, knobSize);
     
     sliderFilterHighGain.setBounds(getWidth()/2 + 100, getHeight()/2, knobSize, knobSize);*/
+    verticalGradientMeter.setBounds(5, 200, 15, 300);
+
+    
     int leftOffest = 60;
     int topOffset = 40;
     int knobSize = 125;

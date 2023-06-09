@@ -100,6 +100,7 @@
 		83FFC9F30EAAA98BE6F2F557 /* juce_core */ /* juce_core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_core; path = /Applications/JUCE/modules/juce_core; sourceTree = "<absolute>"; };
 		842D119E6265BC2235F5A811 /* include_juce_events.mm */ /* include_juce_events.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_events.mm; path = ../../JuceLibraryCode/include_juce_events.mm; sourceTree = SOURCE_ROOT; };
 		857546223EED4C8F916A49C9 /* juce_gui_basics */ /* juce_gui_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_basics; path = /Applications/JUCE/modules/juce_gui_basics; sourceTree = "<absolute>"; };
+		86C6995C6C3E1F01F9EE110F /* VerticalGradientMeter.h */ /* VerticalGradientMeter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VerticalGradientMeter.h; path = ../../Source/VerticalGradientMeter.h; sourceTree = SOURCE_ROOT; };
 		8A0BB644690F1D12E8C461F8 /* QuartzCore.framework */ /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8CF63CAC4427CEAB7B2A7EAF /* include_juce_audio_utils.mm */ /* include_juce_audio_utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_utils.mm; path = ../../JuceLibraryCode/include_juce_audio_utils.mm; sourceTree = SOURCE_ROOT; };
 		8D0AE7E424BBD7DAE21BCC09 /* Convolution.h */ /* Convolution.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Convolution.h; path = ../../Source/Convolution.h; sourceTree = SOURCE_ROOT; };
@@ -304,6 +305,7 @@
 		FD26BF014FDF80C1FD2334D9 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				86C6995C6C3E1F01F9EE110F,
 				8D0AE7E424BBD7DAE21BCC09,
 				E794A963FE2314FDADD1C6A5,
 				F830B21BE749A796EBF1A7A7,

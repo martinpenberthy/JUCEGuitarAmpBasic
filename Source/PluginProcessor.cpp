@@ -138,6 +138,11 @@ void GuitarAmpBasicAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    rmsLevel.reset(sampleRate, 0.5f);
+
+    
+    rmsLevel.setCurrentAndTargetValue(-100.0f);
+    
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
@@ -340,12 +345,16 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+
+    
     
     if(waveshapeFunction != waveshapeFunctionCurrent)
         setFunctionToUse(waveshapeFunction);
     
     auto &inputGain = processorChain.get<inputGainIndex>();
     inputGain.setGainDecibels(inputGainVal);
+    
+    
     
     //Set values for pre gains
     auto &preGain1 = processorChain.get<preGainIndex1>();
@@ -378,7 +387,17 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     if(irLoader.getCurrentIRSize() > 0)
         irLoader.process(juce::dsp::ProcessContextReplacing<float>(block2));
     
+    rmsLevel.skip(buffer.getNumSamples());
     
+    {
+        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+
+        if(value < rmsLevel.getCurrentValue())
+            rmsLevel.setTargetValue(value);
+        else
+            rmsLevel.setCurrentAndTargetValue(value);
+    }
+
 
 }
 
@@ -389,6 +408,15 @@ void GuitarAmpBasicAudioProcessor::reset()
     //filterHigh.reset();
 }
 
+float GuitarAmpBasicAudioProcessor::getRMSValue(const int channel) const
+{
+    jassert(channel == 0 || channel == 1);
+    if(channel == 0)
+        return rmsLevel.getCurrentValue();
+    if(channel == 1)
+        return rmsLevel.getCurrentValue();
+    return 0;
+}
 
 //==============================================================================
 bool GuitarAmpBasicAudioProcessor::hasEditor() const
