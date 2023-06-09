@@ -316,30 +316,34 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, knobSize, knobSize);
     
     sliderFilterHighGain.setBounds(getWidth()/2 + 100, getHeight()/2, knobSize, knobSize);*/
-    int leftOffest = 40;
+    int leftOffest = 60;
     int topOffset = 40;
     int knobSize = 125;
+    int row1Y = 100;
+    int row2Y = 250;
+    int row3Y = 400;
+    
     //IR load button/label
     loadButton.setBounds(leftOffest, topOffset, 100, 25);
     irName.setBounds(loadButton.getX(), loadButton.getY() - 20, 175, 25);
     
     //Waveshape menu
-    waveshapeType1.setBounds(getWidth() - (loadButton.getWidth() + leftOffest), topOffset, 100, 25);
+    waveshapeType1.setBounds(getWidth() - (loadButton.getWidth() + leftOffest + 10), topOffset, 100, 25);
     
-    sliderPreEQ.setBounds(getWidth() / 2 - 50, 100, knobSize, knobSize);
-    sliderPostGain.setBounds(waveshapeType1.getX(), 100, knobSize, knobSize);
+    //Top row
+    sliderInputGain.setBounds(loadButton.getX(), row1Y, knobSize, knobSize);
+    sliderPreEQ.setBounds(getWidth() / 2 - 50, row1Y, knobSize, knobSize);
+    sliderPostGain.setBounds(waveshapeType1.getX(), row1Y, knobSize, knobSize);
     
+    //Middle row
+    sliderPreGain1.setBounds(loadButton.getX(), row2Y, knobSize, knobSize);
+    sliderPreGain2.setBounds(sliderPreEQ.getX(), row2Y, knobSize, knobSize);
+    sliderPreGain3.setBounds(sliderPostGain.getX(), row2Y, knobSize, knobSize);
     
-    sliderPreGain1.setBounds(loadButton.getX() / 2, 250, knobSize, knobSize);
-    sliderPreGain2.setBounds(sliderPreEQ.getX(), 250, knobSize, knobSize);
-    sliderPreGain3.setBounds(sliderPostGain.getX(), 250, knobSize, knobSize);
-    
-    sliderInputGain.setBounds(sliderPreGain1.getX(), 100, knobSize, knobSize);
-
-    
-    sliderFilterLowGain.setBounds(sliderPreGain1.getX(), 400, knobSize, knobSize);
-    sliderFilterMidGain.setBounds(sliderPreGain2.getX(), 400, knobSize, knobSize);
-    sliderFilterHighGain.setBounds(sliderPreGain3.getX(), 400, knobSize, knobSize);
+    //Bottom row
+    sliderFilterLowGain.setBounds(loadButton.getX(), row3Y, knobSize, knobSize);
+    sliderFilterMidGain.setBounds(sliderPreGain2.getX(), row3Y, knobSize, knobSize);
+    sliderFilterHighGain.setBounds(sliderPreGain3.getX(), row3Y, knobSize, knobSize);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()

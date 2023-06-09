@@ -454,8 +454,8 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
     {
         waveshaper1.functionToUse = [](float x)
         {
-            float param = 0.9f;
-            return (x * (std::abs(x) + 0.9f)) * 1.5f / (x * x + (0.3f) * (0.1f / std::abs(x)) + 1.0f);
+            //float param = 0.9f;
+            return (x * (std::abs(x) + 0.9f)) * 1.5f / (x * x + (0.3f) * (0.1f / std::abs(x)) + 1.0f) * 0.6f;
 
             //return (x * (std::abs(x) + param) / (x * x + (param - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
             //return ((x / (std::abs(x) + param) * 1.5f ) / (x * x + (0.0f - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
