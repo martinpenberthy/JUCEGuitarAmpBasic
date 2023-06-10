@@ -32,7 +32,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     irName.setText(audioProcessor.savedFile.getFileName(), juce::dontSendNotification);
     addAndMakeVisible(irName);
     
-    addAndMakeVisible(sliderInputGain);
+
     
     lookAndFeel.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
     lookAndFeel.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
@@ -40,9 +40,9 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     lookAndFeel.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
     lookAndFeel.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
     
-    sliderInputGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderInputGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderInputGain.setDoubleClickReturnValue(true, 0.0f);
+    addAndMakeVisible(sliderInputGain);
+    
+    setSliderProperties(&sliderInputGain);
     sliderInputGain.setLookAndFeel(&lookAndFeel);
     labelInputGain.attachToComponent(&sliderInputGain, false);
     labelInputGain.setText("InputGain(dB)", juce::dontSendNotification);
@@ -55,9 +55,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(sliderPreGain1);
     
-    sliderPreGain1.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderPreGain1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderPreGain1.setDoubleClickReturnValue(true, 0.0f);
+    setSliderProperties(&sliderPreGain1);
     sliderPreGain1.setLookAndFeel(&lookAndFeel);
     labelPreGain1.attachToComponent(&sliderPreGain1, false);
     labelPreGain1.setText("PreGain1(dB)", juce::dontSendNotification);
@@ -69,9 +67,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(sliderPreGain2);
     
-    sliderPreGain2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderPreGain2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderPreGain2.setDoubleClickReturnValue(true, 0.0f);
+    setSliderProperties(&sliderPreGain2);
     sliderPreGain2.setLookAndFeel(&lookAndFeel);
     labelPreGain2.attachToComponent(&sliderPreGain2, false);
     labelPreGain2.setText("PreGain2(dB)", juce::dontSendNotification);
@@ -84,9 +80,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(sliderPreGain3);
     
-    sliderPreGain3.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderPreGain3.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderPreGain3.setDoubleClickReturnValue(true, 0.0f);
+    setSliderProperties(&sliderPreGain3);
     sliderPreGain3.setLookAndFeel(&lookAndFeel);
     labelPreGain3.attachToComponent(&sliderPreGain3, false);
     labelPreGain3.setText("PreGain3(dB)", juce::dontSendNotification);
@@ -99,9 +93,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(sliderPostGain);
     
-    sliderPostGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderPostGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderPostGain.setDoubleClickReturnValue(true, 0.0f);
+    setSliderProperties(&sliderPostGain);
     sliderPostGain.setLookAndFeel(&lookAndFeel);
     labelPostGain.attachToComponent(&sliderPostGain, false);
     labelPostGain.setText("PostGain(dB)", juce::dontSendNotification);
@@ -114,9 +106,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(sliderPreEQ);
     
-    sliderPreEQ.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderPreEQ.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderPreEQ.setDoubleClickReturnValue(true, 0.0f);
+    setSliderProperties(&sliderPreEQ);
     sliderPreEQ.setLookAndFeel(&lookAndFeel);
     labelPreEQ.attachToComponent(&sliderPreEQ, false);
     labelPreEQ.setText("PreEQ", juce::dontSendNotification);
@@ -125,7 +115,6 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     {
         audioProcessor.preEQVal = sliderPreEQ.getValue();
     };
-    
     
     
     addAndMakeVisible(waveshapeType1);
@@ -146,9 +135,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(sliderFilterHighGain);
     
-    sliderFilterHighGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderFilterHighGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderFilterHighGain.setDoubleClickReturnValue(true, 0.0f);
+    setSliderProperties(&sliderFilterHighGain);
     sliderFilterHighGain.setLookAndFeel(&lookAndFeel);
     labelFilterHighGain.attachToComponent(&sliderFilterHighGain, false);
     labelFilterHighGain.setText("Highs", juce::dontSendNotification);
@@ -156,18 +143,14 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     
     addAndMakeVisible(sliderFilterMidGain);
     
-    sliderFilterMidGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderFilterMidGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderFilterMidGain.setDoubleClickReturnValue(true, 0.0f);
+    setSliderProperties(&sliderFilterMidGain);
     sliderFilterMidGain.setLookAndFeel(&lookAndFeel);
     labelFilterMidGain.attachToComponent(&sliderFilterMidGain, false);
     labelFilterMidGain.setText("Mids", juce::dontSendNotification);
     
     addAndMakeVisible(sliderFilterLowGain);
     
-    sliderFilterLowGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
-    sliderFilterLowGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
-    sliderFilterLowGain.setDoubleClickReturnValue(true, 0.0f);
+    setSliderProperties(&sliderFilterLowGain);
     sliderFilterLowGain.setLookAndFeel(&lookAndFeel);
     labelFilterLowGain.attachToComponent(&sliderFilterLowGain, false);
     labelFilterLowGain.setText("Lows", juce::dontSendNotification);
@@ -204,6 +187,14 @@ void GuitarAmpBasicAudioProcessorEditor::timerCallback()
     verticalGradientMeter.setLevel(audioProcessor.getRMSValue(0));
     
     verticalGradientMeter.repaint();
+}
+
+void GuitarAmpBasicAudioProcessorEditor::setSliderProperties(juce::Slider *sliderToSet)
+{
+    
+    sliderToSet->setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+    sliderToSet->setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
+    sliderToSet->setDoubleClickReturnValue(true, 0.0f);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::fileLoader()
