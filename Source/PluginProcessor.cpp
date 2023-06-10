@@ -389,15 +389,11 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     
     rmsLevel.skip(buffer.getNumSamples());
     
-    {
-        const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-
-        if(value < rmsLevel.getCurrentValue())
-            rmsLevel.setTargetValue(value);
-        else
-            rmsLevel.setCurrentAndTargetValue(value);
-    }
-
+    const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+    if(value < rmsLevel.getCurrentValue())
+        rmsLevel.setTargetValue(value);
+    else
+        rmsLevel.setCurrentAndTargetValue(value);
 
 }
 

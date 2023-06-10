@@ -27,53 +27,28 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     loadButton.setButtonText("Load IR");
     loadButton.onClick = [this]()
     {
-        fileChooser = std::make_unique<juce::FileChooser>("Choose file", audioProcessor.root, "*");
-        
-        
-        const auto fileChooserFlags = juce::FileBrowserComponent::openMode |
-                                      juce::FileBrowserComponent::canSelectFiles |
-                                      juce::FileBrowserComponent::canSelectDirectories;
-        
-        fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
-        {
-            juce::File result (chooser.getResult());
-            
-            if(result.getFileExtension() == ".wav" | result.getFileExtension() == ".mp3")
-            {
-                audioProcessor.savedFile = result;
-                audioProcessor.root = result.getParentDirectory().getFullPathName();
-                
-                audioProcessor.variableTree.setProperty("file1", result.getFullPathName(), nullptr);
-                audioProcessor.variableTree.setProperty("root", result.getParentDirectory().getFullPathName(), nullptr);
-                
-                
-                audioProcessor.irLoader.reset();
-                audioProcessor.irLoader.loadImpulseResponse(audioProcessor.savedFile, juce::dsp::Convolution::Stereo::yes,
-                                                            juce::dsp::Convolution::Trim::yes, 0);
-                //irName.setText(result.getFileName(), juce::dontSendNotification);
-            }
-        });
+        fileLoader();
     };
     irName.setText(audioProcessor.savedFile.getFileName(), juce::dontSendNotification);
-    
     addAndMakeVisible(irName);
     
     addAndMakeVisible(sliderInputGain);
     
+    lookAndFeel.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
+    lookAndFeel.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    lookAndFeel.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
+    lookAndFeel.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
+    lookAndFeel.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    
     sliderInputGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderInputGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderInputGain.setDoubleClickReturnValue(true, 0.0f);
-    sliderInputGain.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderInputGain.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderInputGain.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderInputGain.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderInputGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderInputGain.setLookAndFeel(&lookAndFeel);
     labelInputGain.attachToComponent(&sliderInputGain, false);
     labelInputGain.setText("InputGain(dB)", juce::dontSendNotification);
     
     sliderInputGain.onValueChange = [this]()
     {
-        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
         audioProcessor.inputGainVal = sliderInputGain.getValue();
     };
     
@@ -83,17 +58,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderPreGain1.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPreGain1.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderPreGain1.setDoubleClickReturnValue(true, 0.0f);
-    sliderPreGain1.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderPreGain1.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreGain1.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderPreGain1.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreGain1.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderPreGain1.setLookAndFeel(&lookAndFeel);
     labelPreGain1.attachToComponent(&sliderPreGain1, false);
     labelPreGain1.setText("PreGain1(dB)", juce::dontSendNotification);
     
     sliderPreGain1.onValueChange = [this]()
     {
-        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
         audioProcessor.preGainVal1 = sliderPreGain1.getValue();
     };
     
@@ -102,17 +72,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderPreGain2.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPreGain2.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderPreGain2.setDoubleClickReturnValue(true, 0.0f);
-    sliderPreGain2.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderPreGain2.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreGain2.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderPreGain2.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreGain2.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderPreGain2.setLookAndFeel(&lookAndFeel);
     labelPreGain2.attachToComponent(&sliderPreGain2, false);
     labelPreGain2.setText("PreGain2(dB)", juce::dontSendNotification);
     
     sliderPreGain2.onValueChange = [this]()
     {
-        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
         audioProcessor.preGainVal2 = sliderPreGain2.getValue();
     };
     
@@ -122,17 +87,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderPreGain3.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPreGain3.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderPreGain3.setDoubleClickReturnValue(true, 0.0f);
-    sliderPreGain3.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderPreGain3.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreGain3.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderPreGain3.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreGain3.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderPreGain3.setLookAndFeel(&lookAndFeel);
     labelPreGain3.attachToComponent(&sliderPreGain3, false);
     labelPreGain3.setText("PreGain3(dB)", juce::dontSendNotification);
     
     sliderPreGain3.onValueChange = [this]()
     {
-        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
         audioProcessor.preGainVal3 = sliderPreGain3.getValue();
     };
     
@@ -142,17 +102,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderPostGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPostGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderPostGain.setDoubleClickReturnValue(true, 0.0f);
-    sliderPostGain.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderPostGain.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPostGain.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderPostGain.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPostGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderPostGain.setLookAndFeel(&lookAndFeel);
     labelPostGain.attachToComponent(&sliderPostGain, false);
     labelPostGain.setText("PostGain(dB)", juce::dontSendNotification);
     
     sliderPostGain.onValueChange = [this]()
     {
-        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
         audioProcessor.postGainVal = sliderPostGain.getValue();
     };
     
@@ -162,17 +117,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderPreEQ.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderPreEQ.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderPreEQ.setDoubleClickReturnValue(true, 0.0f);
-    sliderPreEQ.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderPreEQ.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreEQ.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderPreEQ.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderPreEQ.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderPreEQ.setLookAndFeel(&lookAndFeel);
     labelPreEQ.attachToComponent(&sliderPreEQ, false);
     labelPreEQ.setText("PreEQ", juce::dontSendNotification);
     
     sliderPreEQ.onValueChange = [this]()
     {
-        //audioProcessor.volume.setTargetValue(sliderGain.getValue());
         audioProcessor.preEQVal = sliderPreEQ.getValue();
     };
     
@@ -190,20 +140,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     waveshapeType1.addItem("HalfRect", 5);
     waveshapeType1.addItem("Amp1", 6);
     waveshapeType1.onChange = [this]{modeMenuChanged();};
-    //waveshapeType1.setSelectedId(1);
-    
-    /*if(audioProcessor.waveshapeFunctionCurrent == "Tanh")
-        waveshapeType1.setSelectedId(1);
-    else if (audioProcessor.waveshapeFunctionCurrent == "AmpTest")
-        waveshapeType1.setSelectedId(2);
-    else if(audioProcessor.waveshapeFunctionCurrent == "x/abs(x)+1")
-        waveshapeType1.setSelectedId(3);
-    else if(audioProcessor.waveshapeFunctionCurrent == "Atan")
-        waveshapeType1.setSelectedId(4);
-    else if(audioProcessor.waveshapeFunctionCurrent == "HalfRect")
-        waveshapeType1.setSelectedId(5);
-    else if(audioProcessor.waveshapeFunctionCurrent == "Amp1")
-        waveshapeType1.setSelectedId(6);*/
+
     modeMenuChanged();
     
     
@@ -212,11 +149,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderFilterHighGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderFilterHighGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderFilterHighGain.setDoubleClickReturnValue(true, 0.0f);
-    sliderFilterHighGain.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderFilterHighGain.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderFilterHighGain.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderFilterHighGain.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderFilterHighGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderFilterHighGain.setLookAndFeel(&lookAndFeel);
     labelFilterHighGain.attachToComponent(&sliderFilterHighGain, false);
     labelFilterHighGain.setText("Highs", juce::dontSendNotification);
     
@@ -226,11 +159,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderFilterMidGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderFilterMidGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderFilterMidGain.setDoubleClickReturnValue(true, 0.0f);
-    sliderFilterMidGain.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderFilterMidGain.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderFilterMidGain.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderFilterMidGain.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderFilterMidGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderFilterMidGain.setLookAndFeel(&lookAndFeel);
     labelFilterMidGain.attachToComponent(&sliderFilterMidGain, false);
     labelFilterMidGain.setText("Mids", juce::dontSendNotification);
     
@@ -239,20 +168,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderFilterLowGain.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     sliderFilterLowGain.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 76, 38);
     sliderFilterLowGain.setDoubleClickReturnValue(true, 0.0f);
-    sliderFilterLowGain.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
-    sliderFilterLowGain.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderFilterLowGain.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
-    sliderFilterLowGain.setColour(juce::Slider::ColourIds::textBoxTextColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
-    sliderFilterLowGain.setColour(juce::Slider::ColourIds::textBoxOutlineColourId, juce::Colours::black.withAlpha(0.0f));
+    sliderFilterLowGain.setLookAndFeel(&lookAndFeel);
     labelFilterLowGain.attachToComponent(&sliderFilterLowGain, false);
     labelFilterLowGain.setText("Lows", juce::dontSendNotification);
     
-    
-    
-   /* addAndMakeVisible(buttonWaveshapeToggle);
-    buttonWaveshapeToggle.onClick() = [this] {
-        updateToggleState (&buttonWaveshapeToggle,   "waveshapeToggle");
-    };*/
     
     sliderAttachmentInputGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "INPUTGAIN", sliderInputGain);
     
@@ -280,15 +199,6 @@ GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
 {
 }
 
-/*void GuitarAmpBasicAudioProcessorEditor::updateToggleState (juce::Button* button, juce::String name)
-{
-    auto state = button->getToggleState();
-
-//In our example we just post the toggle changes to the logger as they happen:
-    juce::String stateString = state ? "ON" : "OFF";
-
-    //juce::Logger::outputDebugString (name + " Button changed to " + stateString);
-}*/
 void GuitarAmpBasicAudioProcessorEditor::timerCallback()
 {
     verticalGradientMeter.setLevel(audioProcessor.getRMSValue(0));
@@ -296,6 +206,35 @@ void GuitarAmpBasicAudioProcessorEditor::timerCallback()
     verticalGradientMeter.repaint();
 }
 
+void GuitarAmpBasicAudioProcessorEditor::fileLoader()
+{
+    fileChooser = std::make_unique<juce::FileChooser>("Choose file", audioProcessor.root, "*");
+    
+    
+    const auto fileChooserFlags = juce::FileBrowserComponent::openMode |
+                                  juce::FileBrowserComponent::canSelectFiles |
+                                  juce::FileBrowserComponent::canSelectDirectories;
+    
+    fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
+    {
+        juce::File result (chooser.getResult());
+        
+        if(result.getFileExtension() == ".wav" | result.getFileExtension() == ".mp3")
+        {
+            audioProcessor.savedFile = result;
+            audioProcessor.root = result.getParentDirectory().getFullPathName();
+            
+            audioProcessor.variableTree.setProperty("file1", result.getFullPathName(), nullptr);
+            audioProcessor.variableTree.setProperty("root", result.getParentDirectory().getFullPathName(), nullptr);
+            
+            
+            audioProcessor.irLoader.reset();
+            audioProcessor.irLoader.loadImpulseResponse(audioProcessor.savedFile, juce::dsp::Convolution::Stereo::yes,
+                                                        juce::dsp::Convolution::Trim::yes, 0);
+            //irName.setText(result.getFileName(), juce::dontSendNotification);
+        }
+    });
+}
 
 //==============================================================================
 void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
@@ -307,29 +246,8 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
-    
-    /*const auto btnX = getWidth() * 0.35f;
-    const auto btnY = getHeight() * 0.65f;
-    const auto btnWidth = getWidth() * 0.15f;
-    const auto btnHeight = getHeight() * 0.25f;
-    int knobSize = 125;
-    
-    waveshapeType1.setBounds(getWidth()/2, getHeight()/2 - 175, 100, 25);
-    loadButton.setBounds(btnX, btnY + 110, btnWidth, btnHeight);
-    irName.setBounds(loadButton.getX() + loadButton.getWidth(), btnY, btnWidth * 2, btnHeight);
-    
-    sliderPreEQ.setBounds(getWidth()/2 - 200, getHeight()/2 - 125, knobSize, knobSize);
-    
-    sliderPreGain1.setBounds(getWidth()/2 - 50, getHeight()/2 - 125, knobSize, knobSize);
-    sliderPreGain2.setBounds(getWidth()/2 - 50, getHeight()/2, knobSize, knobSize);
-    sliderPostGain.setBounds(getWidth()/2 + 100, getHeight()/2 - 125, knobSize, knobSize);
-    
-    sliderFilterHighGain.setBounds(getWidth()/2 + 100, getHeight()/2, knobSize, knobSize);*/
-    verticalGradientMeter.setBounds(5, 200, 15, 300);
+    verticalGradientMeter.setBounds(5, 200, 30, 300);
 
-    
     int leftOffest = 60;
     int topOffset = 40;
     int knobSize = 125;

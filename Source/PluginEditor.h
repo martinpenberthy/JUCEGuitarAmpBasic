@@ -28,12 +28,13 @@ public:
     void resized() override;
     
     void modeMenuChanged();
+    void fileLoader();
     //void updateToggleState(juce::Button* button, juce::String name);
 
 private:
-    Gui::VerticalGradientMeter verticalGradientMeter;
-
+    juce::LookAndFeel_V4 lookAndFeel;
     
+    Gui::VerticalGradientMeter verticalGradientMeter;
     juce::TextButton loadButton;
     juce::Label irName;
     
