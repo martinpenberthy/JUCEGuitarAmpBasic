@@ -33,6 +33,21 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     addAndMakeVisible(irName);
     
 
+    addAndMakeVisible(waveshapeType1);
+
+    labelWaveshapeType1.attachToComponent(&waveshapeType1, false);
+    labelWaveshapeType1.setColour(juce::Label::textColourId, juce::Colours::white);
+    labelWaveshapeType1.setText("Dist Type", juce::dontSendNotification);
+    waveshapeType1.addItem("Tanh", 1);
+    waveshapeType1.addItem("AmpTest", 2);
+    waveshapeType1.addItem("x/abs(x)+1", 3);
+    waveshapeType1.addItem("Atan", 4);
+    waveshapeType1.addItem("HalfRect", 5);
+    waveshapeType1.addItem("Amp1", 6);
+    waveshapeType1.onChange = [this]{modeMenuChanged();};
+
+    modeMenuChanged();
+    
     
     lookAndFeel.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
     lookAndFeel.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
@@ -117,20 +132,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     };
     
     
-    addAndMakeVisible(waveshapeType1);
 
-    labelWaveshapeType1.attachToComponent(&waveshapeType1, false);
-    labelWaveshapeType1.setColour(juce::Label::textColourId, juce::Colours::white);
-    labelWaveshapeType1.setText("Dist Type", juce::dontSendNotification);
-    waveshapeType1.addItem("Tanh", 1);
-    waveshapeType1.addItem("AmpTest", 2);
-    waveshapeType1.addItem("x/abs(x)+1", 3);
-    waveshapeType1.addItem("Atan", 4);
-    waveshapeType1.addItem("HalfRect", 5);
-    waveshapeType1.addItem("Amp1", 6);
-    waveshapeType1.onChange = [this]{modeMenuChanged();};
-
-    modeMenuChanged();
     
     
     addAndMakeVisible(sliderFilterHighGain);
