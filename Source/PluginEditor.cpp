@@ -48,7 +48,6 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
 
     modeMenuChanged();
     
-    
     lookAndFeel.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
     lookAndFeel.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
     lookAndFeel.setColour(juce::Slider::ColourIds::rotarySliderOutlineColourId, juce::Colours::black.withAlpha(0.25f));
@@ -130,11 +129,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     {
         audioProcessor.preEQVal = sliderPreEQ.getValue();
     };
-    
-    
 
-    
-    
     addAndMakeVisible(sliderFilterHighGain);
     
     setSliderProperties(&sliderFilterHighGain);

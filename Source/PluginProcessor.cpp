@@ -34,7 +34,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
             }
         }
     };
-    
+
     //treeState.state.addListener(*this);
 }
 
@@ -215,8 +215,11 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
         //return std::atan(x);
     };
     
-    auto &inputGain = processorChain.get<inputGainIndex>();
+    //auto &inputGain = processorChain.get<inputGainIndex>();
+    
     inputGain.setGainDecibels(0.0f);
+    outputGain.setGainDecibels(0.0f);
+    
     
     //Set up pre and post gain
     auto &preGain1 = processorChain.get<preGainIndex1>();
@@ -228,8 +231,8 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     auto &preGain3 = processorChain.get<preGainIndex3>();
     preGain3.setGainDecibels(0.0f);
     
-    auto &postGain = processorChain.get<postGainIndex>();
-    postGain.setGainDecibels(0.0f);
+    //auto &postGain = processorChain.get<postGainIndex>();
+    //postGain.setGainDecibels(0.0f);
     
     //Set up PreEQ
     auto &preEQ = processorChain.get<preEQIndex>();
@@ -351,10 +354,11 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     if(waveshapeFunction != waveshapeFunctionCurrent)
         setFunctionToUse(waveshapeFunction);
     
-    auto &inputGain = processorChain.get<inputGainIndex>();
+    //auto &inputGain = processorChain.get<inputGainIndex>();
     inputGain.setGainDecibels(inputGainVal);
     
-    
+    juce::dsp::AudioBlock<float> inputGainBlock (buffer);
+    inputGain.process(juce::dsp::ProcessContextReplacing<float>(inputGainBlock));
     
     //Set values for pre gains
     auto &preGain1 = processorChain.get<preGainIndex1>();
@@ -367,8 +371,8 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     preGain3.setGainDecibels(preGainVal3);
     
     //Set value for post gain
-    auto &postGain = processorChain.get<postGainIndex>();
-    postGain.setGainDecibels(postGainVal);
+    //auto &postGain = processorChain.get<postGainIndex>();
+
     
     //Set value for pre EQ
     auto &preEQ = processorChain.get<preEQIndex>();
@@ -378,15 +382,22 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     
     
     //Process waveshaper chain
-    juce::dsp::AudioBlock<float> block (buffer);
-    processorChain.process(juce::dsp::ProcessContextReplacing<float>(block));
+    juce::dsp::AudioBlock<float> processorChainBlock (buffer);
+    processorChain.process(juce::dsp::ProcessContextReplacing<float>(processorChainBlock));
     
     //Process convolver
-    juce::dsp::AudioBlock<float> block2 (buffer);
+    juce::dsp::AudioBlock<float> convolverBlock (buffer);
     
     if(irLoader.getCurrentIRSize() > 0)
-        irLoader.process(juce::dsp::ProcessContextReplacing<float>(block2));
+        irLoader.process(juce::dsp::ProcessContextReplacing<float>(convolverBlock));
     
+    
+    outputGain.setGainDecibels(postGainVal);
+    juce::dsp::AudioBlock<float> outputGainBlock (buffer);
+    outputGain.process(juce::dsp::ProcessContextReplacing<float>(outputGainBlock));
+    
+    
+    /*Set val for RMS level meter*/
     rmsLevel.skip(buffer.getNumSamples());
     
     const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));

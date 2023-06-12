@@ -85,7 +85,7 @@ public:
 private:
     enum
     {
-        inputGainIndex,
+        //inputGainIndex,
         preEQIndex,
         lowEQIndex,
         preGainIndex1,
@@ -96,14 +96,16 @@ private:
         waveshaperIndex3,
         filterLowIndex,
         filterMidIndex,
-        filterHighIndex,
-        postGainIndex
+        filterHighIndex//,
+        //postGainIndex
     };
     
     using IIRFilter = juce::dsp::IIR::Filter<float>;
     using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
     
-    juce::dsp::ProcessorChain<juce::dsp::Gain<float>,
+    juce::dsp::Gain<float> inputGain;
+    
+    juce::dsp::ProcessorChain<//juce::dsp::Gain<float>,
                               juce::dsp::LadderFilter<float>, //PreEQ
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>, //LowEQ
                               juce::dsp::Gain<float>, //Pregain1
@@ -114,8 +116,11 @@ private:
                               juce::dsp::WaveShaper<float>, //Waveshaper3
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
-                              juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
-                              juce::dsp::Gain<float>> processorChain;
+                              juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>
+                              /*,juce::dsp::Gain<float>*/> processorChain;
+    
+    juce::dsp::Gain<float> outputGain;
+    
     
     //juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> filterHigh;
     juce::dsp::ProcessSpec spec;
