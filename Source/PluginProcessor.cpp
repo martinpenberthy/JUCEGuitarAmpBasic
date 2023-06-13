@@ -138,10 +138,13 @@ void GuitarAmpBasicAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    rmsLevel.reset(sampleRate, 0.5f);
     isInput = true;
     
-    rmsLevel.setCurrentAndTargetValue(-100.0f);
+    rmsLevelInput.reset(sampleRate, 0.5f);
+    rmsLevelInput.setCurrentAndTargetValue(-100.0f);
+    
+    rmsLevelOutput.reset(sampleRate, 0.5f);
+    rmsLevelOutput.setCurrentAndTargetValue(-100.0f);
     
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
@@ -348,14 +351,17 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    isInput = true;
     /*Set val for RMS level meter*/
-    rmsLevel.skip(buffer.getNumSamples());
+    rmsLevelInput.skip(buffer.getNumSamples());
     
     const auto valueIn = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-    if(valueIn < rmsLevel.getCurrentValue())
-        rmsLevel.setTargetValue(valueIn);
+    if(valueIn < rmsLevelInput.getCurrentValue())
+        rmsLevelInput.setTargetValue(valueIn);
     else
-        rmsLevel.setCurrentAndTargetValue(valueIn);
+        rmsLevelInput.setCurrentAndTargetValue(valueIn);
+    
+    
     
     if(waveshapeFunction != waveshapeFunctionCurrent)
         setFunctionToUse(waveshapeFunction);
@@ -405,13 +411,13 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     
     
     /*Set val for RMS level meter*/
-    rmsLevel.skip(buffer.getNumSamples());
+    rmsLevelOutput.skip(buffer.getNumSamples());
     isInput = false;
     const auto valueOut = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-    if(valueOut < rmsLevel.getCurrentValue())
-        rmsLevel.setTargetValue(valueOut);
+    if(valueOut < rmsLevelOutput.getCurrentValue())
+        rmsLevelOutput.setTargetValue(valueOut);
     else
-        rmsLevel.setCurrentAndTargetValue(valueOut);
+        rmsLevelOutput.setCurrentAndTargetValue(valueOut);
     
     isInput = true;
 }
@@ -423,13 +429,23 @@ void GuitarAmpBasicAudioProcessor::reset()
     //filterHigh.reset();
 }
 
-float GuitarAmpBasicAudioProcessor::getRMSValue(const int channel) const
+float GuitarAmpBasicAudioProcessor::getRMSValueInput(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
     if(channel == 0)
-        return rmsLevel.getCurrentValue();
+        return rmsLevelInput.getCurrentValue();
     if(channel == 1)
-        return rmsLevel.getCurrentValue();
+        return rmsLevelInput.getCurrentValue();
+    return 0;
+}
+
+float GuitarAmpBasicAudioProcessor::getRMSValueOutput(const int channel) const
+{
+    jassert(channel == 0 || channel == 1);
+    if(channel == 0)
+        return rmsLevelOutput.getCurrentValue();
+    if(channel == 1)
+        return rmsLevelOutput.getCurrentValue();
     return 0;
 }
 

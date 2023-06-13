@@ -12,8 +12,8 @@
 //==============================================================================
 GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAmpBasicAudioProcessor& p)
     : AudioProcessorEditor (&p),
-      verticalGradientMeterInput([&]() {return audioProcessor.getRMSValue(0); }),
-      verticalGradientMeterOutput([&]() {return audioProcessor.getRMSValue(0); }),
+      verticalGradientMeterInput([&]() {return audioProcessor.getRMSValueInput(0); }),
+      verticalGradientMeterOutput([&]() {return audioProcessor.getRMSValueOutput(0); }),
       audioProcessor (p)
 {
     // Make sure that before the constructor has finished, you've set the
@@ -186,11 +186,11 @@ void GuitarAmpBasicAudioProcessorEditor::timerCallback()
     
     if(audioProcessor.isInput)
     {
-        verticalGradientMeterInput.setLevel(audioProcessor.getRMSValue(0));
+        verticalGradientMeterInput.setLevel(audioProcessor.getRMSValueInput(0));
         verticalGradientMeterInput.repaint();
     }else
     {
-        verticalGradientMeterOutput.setLevel(audioProcessor.getRMSValue(0));
+        verticalGradientMeterOutput.setLevel(audioProcessor.getRMSValueOutput(0));
         verticalGradientMeterOutput.repaint();
     }
     
