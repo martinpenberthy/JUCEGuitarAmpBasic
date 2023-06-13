@@ -34,7 +34,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
             }
         }
     };
-
+    isInput = true;
     //treeState.state.addListener(*this);
 }
 
@@ -139,7 +139,7 @@ void GuitarAmpBasicAudioProcessor::changeProgramName (int index, const juce::Str
 void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     rmsLevel.reset(sampleRate, 0.5f);
-
+    isInput = true;
     
     rmsLevel.setCurrentAndTargetValue(-100.0f);
     
@@ -348,8 +348,14 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-
+    /*Set val for RMS level meter*/
+    rmsLevel.skip(buffer.getNumSamples());
     
+    const auto valueIn = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+    if(valueIn < rmsLevel.getCurrentValue())
+        rmsLevel.setTargetValue(valueIn);
+    else
+        rmsLevel.setCurrentAndTargetValue(valueIn);
     
     if(waveshapeFunction != waveshapeFunctionCurrent)
         setFunctionToUse(waveshapeFunction);
@@ -397,15 +403,17 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     outputGain.process(juce::dsp::ProcessContextReplacing<float>(outputGainBlock));
     
     
+    
     /*Set val for RMS level meter*/
     rmsLevel.skip(buffer.getNumSamples());
-    
-    const auto value = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
-    if(value < rmsLevel.getCurrentValue())
-        rmsLevel.setTargetValue(value);
+    isInput = false;
+    const auto valueOut = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
+    if(valueOut < rmsLevel.getCurrentValue())
+        rmsLevel.setTargetValue(valueOut);
     else
-        rmsLevel.setCurrentAndTargetValue(value);
-
+        rmsLevel.setCurrentAndTargetValue(valueOut);
+    
+    isInput = true;
 }
 
 void GuitarAmpBasicAudioProcessor::reset()

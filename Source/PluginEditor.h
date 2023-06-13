@@ -35,7 +35,9 @@ public:
 private:
     juce::LookAndFeel_V4 lookAndFeel;
     
-    Gui::VerticalGradientMeter verticalGradientMeter;
+    Gui::VerticalGradientMeter verticalGradientMeterInput;
+    Gui::VerticalGradientMeter verticalGradientMeterOutput;
+    
     juce::TextButton loadButton;
     juce::Label irName;
     

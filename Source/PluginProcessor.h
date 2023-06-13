@@ -69,6 +69,7 @@ public:
     std::string waveshapeFunction;
     std::string waveshapeFunctionCurrent;
     
+    bool isInput;
     float inputGainVal {0.0f};
     
     float preEQVal {5.0f};

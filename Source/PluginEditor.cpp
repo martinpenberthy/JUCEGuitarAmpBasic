@@ -12,7 +12,8 @@
 //==============================================================================
 GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAmpBasicAudioProcessor& p)
     : AudioProcessorEditor (&p),
-      verticalGradientMeter([&]() {return audioProcessor.getRMSValue(0); }),
+      verticalGradientMeterInput([&]() {return audioProcessor.getRMSValue(0); }),
+      verticalGradientMeterOutput([&]() {return audioProcessor.getRMSValue(0); }),
       audioProcessor (p)
 {
     // Make sure that before the constructor has finished, you've set the
@@ -20,7 +21,8 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     setSize (500, 600);
     
     
-    addAndMakeVisible(verticalGradientMeter);
+    addAndMakeVisible(verticalGradientMeterInput);
+    addAndMakeVisible(verticalGradientMeterOutput);
     startTimerHz(24);
     
     addAndMakeVisible(loadButton);
@@ -181,9 +183,17 @@ GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
 
 void GuitarAmpBasicAudioProcessorEditor::timerCallback()
 {
-    verticalGradientMeter.setLevel(audioProcessor.getRMSValue(0));
     
-    verticalGradientMeter.repaint();
+    if(audioProcessor.isInput)
+    {
+        verticalGradientMeterInput.setLevel(audioProcessor.getRMSValue(0));
+        verticalGradientMeterInput.repaint();
+    }else
+    {
+        verticalGradientMeterOutput.setLevel(audioProcessor.getRMSValue(0));
+        verticalGradientMeterOutput.repaint();
+    }
+    
 }
 
 void GuitarAmpBasicAudioProcessorEditor::setSliderProperties(juce::Slider *sliderToSet)
@@ -234,8 +244,9 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
 {
-    verticalGradientMeter.setBounds(5, 200, 30, 300);
-
+    verticalGradientMeterInput.setBounds(5, 200, 30, 300);
+    verticalGradientMeterOutput.setBounds(getWidth() - (verticalGradientMeterInput.getWidth() + verticalGradientMeterInput.getX()), 200, 30, 300);
+    
     int leftOffest = 60;
     int topOffset = 40;
     int knobSize = 125;
