@@ -18,7 +18,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (500, 600);
+    setSize (500, 520);
     
     
     addAndMakeVisible(verticalGradientMeterInput);
@@ -244,8 +244,12 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
 {
-    verticalGradientMeterInput.setBounds(5, 200, 30, 300);
-    verticalGradientMeterOutput.setBounds(getWidth() - (verticalGradientMeterInput.getWidth() + verticalGradientMeterInput.getX()), 200, 30, 300);
+    int meterWidth = 20;
+    int meterHeight = 300;
+    int meterX = 5;
+    int meterY = 190;
+    verticalGradientMeterInput.setBounds(meterX, meterY, meterWidth, meterHeight);
+    verticalGradientMeterOutput.setBounds(getWidth() - (verticalGradientMeterInput.getWidth() + verticalGradientMeterInput.getX()), meterY, meterWidth, meterHeight);
     
     int leftOffest = 60;
     int topOffset = 40;
