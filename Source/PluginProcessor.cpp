@@ -342,17 +342,21 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
+    
+    //Set waveshaping function if changed
+    if(waveshapeFunction != waveshapeFunctionCurrent)
+        setFunctionToUse(waveshapeFunction);
+    
+    //Set and process input gain
+    inputGain.setGainDecibels(inputGainVal);
+    
+    juce::dsp::AudioBlock<float> inputGainBlock (buffer);
+    inputGain.process(juce::dsp::ProcessContextReplacing<float>(inputGainBlock));
+    
+    //Set val for input level meter
     isInput = true;
-    /*Set val for RMS level meter*/
     rmsLevelInput.skip(buffer.getNumSamples());
     
     const auto valueIn = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
@@ -360,17 +364,6 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         rmsLevelInput.setTargetValue(valueIn);
     else
         rmsLevelInput.setCurrentAndTargetValue(valueIn);
-    
-    
-    
-    if(waveshapeFunction != waveshapeFunctionCurrent)
-        setFunctionToUse(waveshapeFunction);
-    
-    //auto &inputGain = processorChain.get<inputGainIndex>();
-    inputGain.setGainDecibels(inputGainVal);
-    
-    juce::dsp::AudioBlock<float> inputGainBlock (buffer);
-    inputGain.process(juce::dsp::ProcessContextReplacing<float>(inputGainBlock));
     
     //Set values for pre gains
     auto &preGain1 = processorChain.get<preGainIndex1>();
@@ -381,10 +374,6 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     
     auto &preGain3 = processorChain.get<preGainIndex3>();
     preGain3.setGainDecibels(preGainVal3);
-    
-    //Set value for post gain
-    //auto &postGain = processorChain.get<postGainIndex>();
-
     
     //Set value for pre EQ
     auto &preEQ = processorChain.get<preEQIndex>();
@@ -403,14 +392,13 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     if(irLoader.getCurrentIRSize() > 0)
         irLoader.process(juce::dsp::ProcessContextReplacing<float>(convolverBlock));
     
-    
+    //Process output gain
     outputGain.setGainDecibels(postGainVal);
     juce::dsp::AudioBlock<float> outputGainBlock (buffer);
     outputGain.process(juce::dsp::ProcessContextReplacing<float>(outputGainBlock));
     
     
-    
-    /*Set val for RMS level meter*/
+    //Set val for output level meter
     rmsLevelOutput.skip(buffer.getNumSamples());
     isInput = false;
     const auto valueOut = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
@@ -428,7 +416,7 @@ void GuitarAmpBasicAudioProcessor::reset()
     irLoader.reset(); // [3]
     //filterHigh.reset();
 }
-
+    
 float GuitarAmpBasicAudioProcessor::getRMSValueInput(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
