@@ -214,34 +214,33 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
         //return std::atan(x);
     };
     
-    inputGainVal = *treeState.getRawParameterValue("INPUTGAIN");
-    postGainVal = *treeState.getRawParameterValue("POSTGAIN");
+    //inputGainVal = *treeState.getRawParameterValue("INPUTGAIN");
+    //postGainVal = *treeState.getRawParameterValue("POSTGAIN");
     
-    inputGain.setGainDecibels(inputGainVal);
-    outputGain.setGainDecibels(postGainVal);
+    inputGain.setGainDecibels(*treeState.getRawParameterValue("INPUTGAIN"));
+    outputGain.setGainDecibels(*treeState.getRawParameterValue("POSTGAIN"));
     
     
     //Set up pre and post gain
     auto &preGain1 = processorChain.get<preGainIndex1>();
-    preGainVal1 = *treeState.getRawParameterValue("PREGAIN1");
-    preGain1.setGainDecibels(preGainVal1);
+    //preGainVal1 = *treeState.getRawParameterValue("PREGAIN1");
+    preGain1.setGainDecibels(*treeState.getRawParameterValue("PREGAIN1"));
     
     auto &preGain2 = processorChain.get<preGainIndex2>();
-    preGainVal2 = *treeState.getRawParameterValue("PREGAIN2");
-    preGain2.setGainDecibels(preGainVal2);
+    //preGainVal2 = *treeState.getRawParameterValue("PREGAIN2");
+    preGain2.setGainDecibels(*treeState.getRawParameterValue("PREGAIN2"));
     
     auto &preGain3 = processorChain.get<preGainIndex3>();
-    preGainVal3 = *treeState.getRawParameterValue("PREGAIN3");
-    preGain3.setGainDecibels(preGainVal3);
+    //preGainVal3 = *treeState.getRawParameterValue("PREGAIN3");
+    preGain3.setGainDecibels(*treeState.getRawParameterValue("PREGAIN3"));
     
     
     //Set up PreEQ
     auto &preEQ = processorChain.get<preEQIndex>();
-    preEQVal = *treeState.getRawParameterValue("PREEQ") * 1000.0f;
     
     preEQ.setMode(juce::dsp::LadderFilterMode::LPF12);
     preEQ.setResonance(0.2);
-    preEQ.setCutoffFrequencyHz(preEQVal);
+    preEQ.setCutoffFrequencyHz(*treeState.getRawParameterValue("PREEQ") * 1000.0f);
     preEQ.setDrive(1.0f);
     
     

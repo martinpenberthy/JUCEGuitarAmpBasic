@@ -74,14 +74,14 @@ public:
     std::string waveshapeFunctionCurrent;
     
     bool isInput;
-    float inputGainVal {0.0f};
+    /*float inputGainVal {0.0f};
     
     float preEQVal {5.0f};
     float preGainVal1 {0.0f};
     float preGainVal2 {0.0f};
     float preGainVal3 {0.0f};
     
-    float postGainVal {0.0f};
+    float postGainVal {0.0f};*/ 
 
     //juce::dsp::LadderFilterMode filterMode;
     
