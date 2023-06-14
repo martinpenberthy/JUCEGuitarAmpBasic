@@ -63,10 +63,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelInputGain.attachToComponent(&sliderInputGain, false);
     labelInputGain.setText("InputGain(dB)", juce::dontSendNotification);
     
-    sliderInputGain.onValueChange = [this]()
+    /*sliderInputGain.onValueChange = [this]()
     {
         audioProcessor.inputGainVal = sliderInputGain.getValue();
-    };
+    };*/
     
     
     addAndMakeVisible(sliderPreGain1);
@@ -76,10 +76,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelPreGain1.attachToComponent(&sliderPreGain1, false);
     labelPreGain1.setText("PreGain1(dB)", juce::dontSendNotification);
     
-    sliderPreGain1.onValueChange = [this]()
+    /*sliderPreGain1.onValueChange = [this]()
     {
         audioProcessor.preGainVal1 = sliderPreGain1.getValue();
-    };
+    };*/
     
     addAndMakeVisible(sliderPreGain2);
     
@@ -88,10 +88,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelPreGain2.attachToComponent(&sliderPreGain2, false);
     labelPreGain2.setText("PreGain2(dB)", juce::dontSendNotification);
     
-    sliderPreGain2.onValueChange = [this]()
+    /*sliderPreGain2.onValueChange = [this]()
     {
         audioProcessor.preGainVal2 = sliderPreGain2.getValue();
-    };
+    };*/
     
     
     addAndMakeVisible(sliderPreGain3);
@@ -101,10 +101,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelPreGain3.attachToComponent(&sliderPreGain3, false);
     labelPreGain3.setText("PreGain3(dB)", juce::dontSendNotification);
     
-    sliderPreGain3.onValueChange = [this]()
+    /*sliderPreGain3.onValueChange = [this]()
     {
         audioProcessor.preGainVal3 = sliderPreGain3.getValue();
-    };
+    };*/
     
     
     addAndMakeVisible(sliderPostGain);
@@ -114,10 +114,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelPostGain.attachToComponent(&sliderPostGain, false);
     labelPostGain.setText("PostGain(dB)", juce::dontSendNotification);
     
-    sliderPostGain.onValueChange = [this]()
+    /*sliderPostGain.onValueChange = [this]()
     {
         audioProcessor.postGainVal = sliderPostGain.getValue();
-    };
+    };*/
     
     
     addAndMakeVisible(sliderPreEQ);
@@ -127,10 +127,10 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelPreEQ.attachToComponent(&sliderPreEQ, false);
     labelPreEQ.setText("PreEQ", juce::dontSendNotification);
     
-    sliderPreEQ.onValueChange = [this]()
+    /*sliderPreEQ.onValueChange = [this]()
     {
         audioProcessor.preEQVal = sliderPreEQ.getValue();
-    };
+    };*/
 
     addAndMakeVisible(sliderFilterHighGain);
     
@@ -229,7 +229,9 @@ void GuitarAmpBasicAudioProcessorEditor::fileLoader()
             audioProcessor.irLoader.reset();
             audioProcessor.irLoader.loadImpulseResponse(audioProcessor.savedFile, juce::dsp::Convolution::Stereo::yes,
                                                         juce::dsp::Convolution::Trim::yes, 0);
-            //irName.setText(result.getFileName(), juce::dontSendNotification);
+            irName.setText(result.getFileName(), juce::dontSendNotification);
+            //irName.setText(audioProcessor.savedFile.getFileName(), juce::dontSendNotification);
+
         }
     });
 }

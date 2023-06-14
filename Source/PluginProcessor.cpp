@@ -19,7 +19,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ), treeState(*this, nullptr, "PARAMETERS", createParameterLayout())//, filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 1.0f))
+                       ), treeState(*this, nullptr, juce::Identifier("PARAMETERS"), createParameterLayout())//, filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 1.0f))
 #endif
 {
     variableTree =
@@ -35,7 +35,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
         }
     };
     isInput = true;
-    //treeState.state.addListener(*this);
+    treeState.state.addListener(this);
 }
 
 GuitarAmpBasicAudioProcessor::~GuitarAmpBasicAudioProcessor()
@@ -67,10 +67,6 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
     return {params.begin(), params.end()};
 }
 
-void GuitarAmpBasicAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
-{
-    
-}
 
 
 //==============================================================================
@@ -217,27 +213,35 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
         //return (x * x) / 2.0f;
         //return std::atan(x);
     };
-        
-    inputGain.setGainDecibels(0.0f);
-    outputGain.setGainDecibels(0.0f);
+    
+    inputGainVal = treeState.getRawParameterValue("INPUTGAIN")->load();
+    postGainVal = treeState.getRawParameterValue("POSTGAIN")->load();
+    
+    inputGain.setGainDecibels(inputGainVal);
+    outputGain.setGainDecibels(postGainVal);
     
     
     //Set up pre and post gain
     auto &preGain1 = processorChain.get<preGainIndex1>();
-    preGain1.setGainDecibels(0.0f);
+    preGainVal1 = treeState.getRawParameterValue("PREGAIN1")->load();
+    preGain1.setGainDecibels(preGainVal1);
     
     auto &preGain2 = processorChain.get<preGainIndex2>();
-    preGain2.setGainDecibels(0.0f);
+    preGainVal2 = treeState.getRawParameterValue("PREGAIN2")->load();
+    preGain2.setGainDecibels(preGainVal2);
     
     auto &preGain3 = processorChain.get<preGainIndex3>();
-    preGain3.setGainDecibels(0.0f);
+    preGainVal3 = treeState.getRawParameterValue("PREGAIN3")->load();
+    preGain3.setGainDecibels(preGainVal3);
     
     
     //Set up PreEQ
     auto &preEQ = processorChain.get<preEQIndex>();
+    preEQVal = treeState.getRawParameterValue("PREEQ")->load() * 1000.0f;
+    
     preEQ.setMode(juce::dsp::LadderFilterMode::LPF12);
     preEQ.setResonance(0.2);
-    preEQ.setCutoffFrequencyHz(5000.0f);
+    preEQ.setCutoffFrequencyHz(preEQVal);
     preEQ.setDrive(1.0f);
     
     
@@ -245,14 +249,15 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     *lowEQ.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, 400.0f, 0.4f, 0.1f);
     
     
-    auto &filterHigh = processorChain.get<filterHighIndex>();
-    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 5000.0f, 0.6f, 1.0f);
+    /*auto &filterHigh = processorChain.get<filterHighIndex>();
+    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 5000.0f, 0.6f, treeState.getRawParameterValue("HIGH")->load());
     
     auto &filterMid = processorChain.get<filterMidIndex>();
-    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 500.0f, 0.9f, 1.0f);
+    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 500.0f, 0.9f, treeState.getRawParameterValue("MID")->load());
     
     auto &filterLow = processorChain.get<filterLowIndex>();
-    *filterLow.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 100.0f, 0.6f, 1.0f);
+    *filterLow.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 100.0f, 0.6f, treeState.getRawParameterValue("LOW")->load());*/
+    updateFilter();
 
     
     processorChain.prepare(spec);
@@ -443,22 +448,22 @@ juce::AudioProcessorEditor* GuitarAmpBasicAudioProcessor::createEditor()
 //==============================================================================
 void GuitarAmpBasicAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    /*treeState.state.appendChild(variableTree, nullptr);
+    treeState.state.appendChild(variableTree, nullptr);
     juce::MemoryOutputStream stream(destData, false);
-    treeState.state.writeToStream(stream);*/
-    auto state = treeState.copyState();
+    treeState.state.writeToStream(stream);
+    /*auto state = treeState.copyState();
     std::unique_ptr<juce::XmlElement> xml (state.createXml());
-    copyXmlToBinary (*xml, destData);
+    copyXmlToBinary (*xml, destData);*/
     
 
 }
 
 void GuitarAmpBasicAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    //auto tree = juce::ValueTree::readFromData(data, size_t(sizeInBytes));
-    //variableTree = tree.getChildWithName("Variables");
+    auto tree = juce::ValueTree::readFromData(data, size_t(sizeInBytes));
+    variableTree = tree.getChildWithName("Variables");
 
-    /*if(tree.isValid())
+    if(tree.isValid())
     {
         treeState.state = tree;
         
@@ -466,13 +471,13 @@ void GuitarAmpBasicAudioProcessor::setStateInformation (const void* data, int si
         root = juce::File(variableTree.getProperty("root"));
         
         irLoader.loadImpulseResponse(savedFile, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
-    }*/
+    }
     
-    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    /*std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
 
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName (treeState.state.getType()))
-            treeState.replaceState (juce::ValueTree::fromXml (*xmlState));
+            treeState.replaceState (juce::ValueTree::fromXml (*xmlState));*/
 }
     
 

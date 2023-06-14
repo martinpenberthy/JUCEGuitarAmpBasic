@@ -13,7 +13,7 @@
 //==============================================================================
 /**
 */
-class GuitarAmpBasicAudioProcessor  : public juce::AudioProcessor, public juce::AudioProcessorValueTreeState::Listener
+class GuitarAmpBasicAudioProcessor  : public juce::AudioProcessor, public juce::ValueTree::Listener
                             #if JucePlugin_Enable_ARA
                              , public juce::AudioProcessorARAExtension
                             #endif
@@ -133,8 +133,6 @@ private:
     juce::LinearSmoothedValue<float> rmsLevelOutput;
 
 
-
-    void parameterChanged(const juce::String& parameterID, float newValue) override;
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GuitarAmpBasicAudioProcessor)
 };
