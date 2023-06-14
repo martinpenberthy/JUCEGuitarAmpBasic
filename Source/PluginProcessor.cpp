@@ -217,9 +217,7 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
         //return (x * x) / 2.0f;
         //return std::atan(x);
     };
-    
-    //auto &inputGain = processorChain.get<inputGainIndex>();
-    
+        
     inputGain.setGainDecibels(0.0f);
     outputGain.setGainDecibels(0.0f);
     
@@ -234,8 +232,6 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     auto &preGain3 = processorChain.get<preGainIndex3>();
     preGain3.setGainDecibels(0.0f);
     
-    //auto &postGain = processorChain.get<postGainIndex>();
-    //postGain.setGainDecibels(0.0f);
     
     //Set up PreEQ
     auto &preEQ = processorChain.get<preEQIndex>();
@@ -244,11 +240,7 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     preEQ.setCutoffFrequencyHz(5000.0f);
     preEQ.setDrive(1.0f);
     
-    /*auto &lowEQ = processorChain.get<lowEQIndex>();
-    lowEQ.setMode(juce::dsp::LadderFilterMode::HPF12);
-    lowEQ.setResonance(0.1);
-    lowEQ.setCutoffFrequencyHz(300.0f);
-    lowEQ.setDrive(1.0f);*/
+    
     auto &lowEQ = processorChain.get<lowEQIndex>();
     *lowEQ.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, 400.0f, 0.4f, 0.1f);
     
@@ -451,19 +443,22 @@ juce::AudioProcessorEditor* GuitarAmpBasicAudioProcessor::createEditor()
 //==============================================================================
 void GuitarAmpBasicAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    treeState.state.appendChild(variableTree, nullptr);
+    /*treeState.state.appendChild(variableTree, nullptr);
     juce::MemoryOutputStream stream(destData, false);
-    treeState.state.writeToStream(stream);
+    treeState.state.writeToStream(stream);*/
+    auto state = treeState.copyState();
+    std::unique_ptr<juce::XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
     
 
 }
 
 void GuitarAmpBasicAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    auto tree = juce::ValueTree::readFromData(data, size_t(sizeInBytes));
-    variableTree = tree.getChildWithName("Variables");
-    
-    if(tree.isValid())
+    //auto tree = juce::ValueTree::readFromData(data, size_t(sizeInBytes));
+    //variableTree = tree.getChildWithName("Variables");
+
+    /*if(tree.isValid())
     {
         treeState.state = tree;
         
@@ -471,10 +466,15 @@ void GuitarAmpBasicAudioProcessor::setStateInformation (const void* data, int si
         root = juce::File(variableTree.getProperty("root"));
         
         irLoader.loadImpulseResponse(savedFile, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
-    }
+    }*/
     
+    std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
 
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (treeState.state.getType()))
+            treeState.replaceState (juce::ValueTree::fromXml (*xmlState));
 }
+    
 
 
 void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)

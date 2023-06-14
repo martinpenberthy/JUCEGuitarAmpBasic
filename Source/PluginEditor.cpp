@@ -48,7 +48,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     waveshapeType1.addItem("Amp1", 6);
     waveshapeType1.onChange = [this]{modeMenuChanged();};
 
-    modeMenuChanged();
+    //modeMenuChanged();
     
     lookAndFeel.setColour(juce::Slider::ColourIds::thumbColourId, juce::Colours::black.withAlpha(0.0f));
     lookAndFeel.setColour(juce::Slider::ColourIds::rotarySliderFillColourId, juce::Colours::whitesmoke.withAlpha(0.25f));
