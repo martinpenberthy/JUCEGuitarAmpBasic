@@ -32,7 +32,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
         fileLoader();
     };
     irName.setText(audioProcessor.savedFile.getFileName(), juce::dontSendNotification);
-    addAndMakeVisible(irName);
+    addAndMakeVisible(irName);  
     
 
     addAndMakeVisible(waveshapeType1);

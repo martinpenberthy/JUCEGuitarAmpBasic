@@ -214,8 +214,8 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
         //return std::atan(x);
     };
     
-    inputGainVal = treeState.getRawParameterValue("INPUTGAIN")->load();
-    postGainVal = treeState.getRawParameterValue("POSTGAIN")->load();
+    inputGainVal = *treeState.getRawParameterValue("INPUTGAIN");
+    postGainVal = *treeState.getRawParameterValue("POSTGAIN");
     
     inputGain.setGainDecibels(inputGainVal);
     outputGain.setGainDecibels(postGainVal);
@@ -223,21 +223,21 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     
     //Set up pre and post gain
     auto &preGain1 = processorChain.get<preGainIndex1>();
-    preGainVal1 = treeState.getRawParameterValue("PREGAIN1")->load();
+    preGainVal1 = *treeState.getRawParameterValue("PREGAIN1");
     preGain1.setGainDecibels(preGainVal1);
     
     auto &preGain2 = processorChain.get<preGainIndex2>();
-    preGainVal2 = treeState.getRawParameterValue("PREGAIN2")->load();
+    preGainVal2 = *treeState.getRawParameterValue("PREGAIN2");
     preGain2.setGainDecibels(preGainVal2);
     
     auto &preGain3 = processorChain.get<preGainIndex3>();
-    preGainVal3 = treeState.getRawParameterValue("PREGAIN3")->load();
+    preGainVal3 = *treeState.getRawParameterValue("PREGAIN3");
     preGain3.setGainDecibels(preGainVal3);
     
     
     //Set up PreEQ
     auto &preEQ = processorChain.get<preEQIndex>();
-    preEQVal = treeState.getRawParameterValue("PREEQ")->load() * 1000.0f;
+    preEQVal = *treeState.getRawParameterValue("PREEQ") * 1000.0f;
     
     preEQ.setMode(juce::dsp::LadderFilterMode::LPF12);
     preEQ.setResonance(0.2);
@@ -347,7 +347,7 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         setFunctionToUse(waveshapeFunction);
     
     //Set and process input gain
-    inputGain.setGainDecibels(inputGainVal);
+    inputGain.setGainDecibels(*treeState.getRawParameterValue("INPUTGAIN"));
     
     juce::dsp::AudioBlock<float> inputGainBlock (buffer);
     inputGain.process(juce::dsp::ProcessContextReplacing<float>(inputGainBlock));
@@ -364,17 +364,17 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     
     //Set values for pre gains
     auto &preGain1 = processorChain.get<preGainIndex1>();
-    preGain1.setGainDecibels(preGainVal1);
+    preGain1.setGainDecibels(*treeState.getRawParameterValue("PREGAIN1"));
     
     auto &preGain2 = processorChain.get<preGainIndex2>();
-    preGain2.setGainDecibels(preGainVal2);
+    preGain2.setGainDecibels(*treeState.getRawParameterValue("PREGAIN2"));
     
     auto &preGain3 = processorChain.get<preGainIndex3>();
-    preGain3.setGainDecibels(preGainVal3);
+    preGain3.setGainDecibels(*treeState.getRawParameterValue("PREGAIN3"));
     
     //Set value for pre EQ
     auto &preEQ = processorChain.get<preEQIndex>();
-    preEQ.setCutoffFrequencyHz(preEQVal * 1000.0f);
+    preEQ.setCutoffFrequencyHz(*treeState.getRawParameterValue("PREEQ") * 1000.0f);
     
     updateFilter();
     
@@ -390,7 +390,7 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         irLoader.process(juce::dsp::ProcessContextReplacing<float>(convolverBlock));
     
     //Process output gain
-    outputGain.setGainDecibels(postGainVal);
+    outputGain.setGainDecibels(*treeState.getRawParameterValue("POSTGAIN"));
     juce::dsp::AudioBlock<float> outputGainBlock (buffer);
     outputGain.process(juce::dsp::ProcessContextReplacing<float>(outputGainBlock));
     
@@ -398,6 +398,7 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     //Set val for output level meter
     rmsLevelOutput.skip(buffer.getNumSamples());
     isInput = false;
+    
     const auto valueOut = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, buffer.getNumSamples()));
     if(valueOut < rmsLevelOutput.getCurrentValue())
         rmsLevelOutput.setTargetValue(valueOut);
