@@ -20,6 +20,8 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     // editor's size to whatever you need it to be.
     setSize (500, 520);
     
+    addAndMakeVisible(labelPlus6dBLeft);
+    labelPlus6dBLeft.setText("+6", juce::dontSendNotification);
     
     addAndMakeVisible(verticalGradientMeterInput);
     addAndMakeVisible(verticalGradientMeterOutput);
@@ -246,12 +248,14 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
 {
-    int meterWidth = 20;
+    int meterWidth = 15;
     int meterHeight = 510;
     int meterX = 5;
     int meterY = 5;
     verticalGradientMeterInput.setBounds(meterX, meterY, meterWidth, meterHeight);
     verticalGradientMeterOutput.setBounds(getWidth() - (verticalGradientMeterInput.getWidth() + verticalGradientMeterInput.getX()), meterY, meterWidth, meterHeight);
+    
+    labelPlus6dBLeft.setBounds(verticalGradientMeterInput.getX(), verticalGradientMeterInput.getY(), 25, 25);
     
     int leftOffest = 60;
     int topOffset = 40;
