@@ -35,7 +35,8 @@ public:
 private:
     juce::LookAndFeel_V4 lookAndFeel;
     
-    juce::Label labelPlus6dBLeft;
+    juce::Image testImage;
+    //juce::Label labelPlus6dBLeft;
     Gui::VerticalGradientMeter verticalGradientMeterInput;
     Gui::VerticalGradientMeter verticalGradientMeterOutput;
     

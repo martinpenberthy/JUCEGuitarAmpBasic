@@ -20,8 +20,9 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     // editor's size to whatever you need it to be.
     setSize (500, 520);
     
-    addAndMakeVisible(labelPlus6dBLeft);
+    /*addAndMakeVisible(labelPlus6dBLeft);
     labelPlus6dBLeft.setText("+6", juce::dontSendNotification);
+    labelPlus6dBLeft.attachToComponent(&verticalGradientMeterInput, false);*/
     
     addAndMakeVisible(verticalGradientMeterInput);
     addAndMakeVisible(verticalGradientMeterOutput);
@@ -243,7 +244,9 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
+    
+    testImage = juce::ImageCache::getFromMemory(BinaryData::Glitchtastic_jpg, BinaryData::Glitchtastic_jpgSize);
+    g.drawImageWithin(testImage, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
@@ -255,7 +258,7 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     verticalGradientMeterInput.setBounds(meterX, meterY, meterWidth, meterHeight);
     verticalGradientMeterOutput.setBounds(getWidth() - (verticalGradientMeterInput.getWidth() + verticalGradientMeterInput.getX()), meterY, meterWidth, meterHeight);
     
-    labelPlus6dBLeft.setBounds(verticalGradientMeterInput.getX(), verticalGradientMeterInput.getY(), 25, 25);
+    //labelPlus6dBLeft.setBounds(/*verticalGradientMeterInput.getX() + meterWidth*/getWidth() / 2, getHeight() / 2, 25, 25);
     
     int leftOffest = 60;
     int topOffset = 40;

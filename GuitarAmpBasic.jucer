@@ -4,6 +4,10 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
               companyName="Black Martini">
   <MAINGROUP id="TCJxXs" name="GuitarAmpBasic">
+    <GROUP id="{E22C544A-DA09-EAC6-0D25-F5A6B5F119A9}" name="Assets">
+      <FILE id="flpioM" name="Glitchtastic.jpg" compile="0" resource="1"
+            file="../../../Downloads/Glitchtastic.jpg"/>
+    </GROUP>
     <GROUP id="{0743106B-80D3-4CC6-3460-10808AC36CE3}" name="Source">
       <FILE id="EZt0ic" name="VerticalGradientMeter.h" compile="0" resource="0"
             file="Source/VerticalGradientMeter.h"/>
