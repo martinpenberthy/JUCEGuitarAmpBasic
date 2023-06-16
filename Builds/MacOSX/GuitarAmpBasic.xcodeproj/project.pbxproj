@@ -71,6 +71,7 @@
 		0944F9A1DD2446E15D27D876 /* Info-AU.plist */ /* Info-AU.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info-AU.plist"; path = "Info-AU.plist"; sourceTree = SOURCE_ROOT; };
 		0C540C9D1481B2800E7922B4 /* include_juce_audio_plugin_client_ARA.cpp */ /* include_juce_audio_plugin_client_ARA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_ARA.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_ARA.cpp; sourceTree = SOURCE_ROOT; };
 		1358287347664E707F3F9910 /* WebKit.framework */ /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		201EA0BC084F02566FC1A659 /* LevelMeter1.png */ /* LevelMeter1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LevelMeter1.png; path = ../../../../../Downloads/LevelMeter1.png; sourceTree = SOURCE_ROOT; };
 		227462AD20559BA9D8F99E82 /* include_juce_gui_extra.mm */ /* include_juce_gui_extra.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_extra.mm; path = ../../JuceLibraryCode/include_juce_gui_extra.mm; sourceTree = SOURCE_ROOT; };
 		238BBACE1FEBCDC9AF631D19 /* juce_audio_basics */ /* juce_audio_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_basics; path = /Applications/JUCE/modules/juce_audio_basics; sourceTree = "<absolute>"; };
 		2BD192FD5E40E2CBE727EE52 /* Accelerate.framework */ /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -218,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				8FE197A09056C01FA8CCA90F,
+				201EA0BC084F02566FC1A659,
 			);
 			name = Assets;
 			sourceTree = "<group>";

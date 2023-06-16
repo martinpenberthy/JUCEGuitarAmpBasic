@@ -245,8 +245,27 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     
-    testImage = juce::ImageCache::getFromMemory(BinaryData::Glitchtastic_jpg, BinaryData::Glitchtastic_jpgSize);
-    g.drawImageWithin(testImage, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);
+    /*testImage = juce::ImageCache::getFromMemory(BinaryData::Glitchtastic_jpg, BinaryData::Glitchtastic_jpgSize);
+    g.drawImageWithin(testImage, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);*/
+     
+    /*g.setColour (juce::Colours::whitesmoke.withAlpha(0.25f));
+ 
+    float lineLength = 15.0f;
+    juce::Line<float> line (juce::Point<float> (verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth(),
+                                                verticalGradientMeterInput.getY() + lineLength),
+                            juce::Point<float> (verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth() + lineLength,
+                                                verticalGradientMeterInput.getY() + lineLength));
+ 
+    g.drawLine (line, 2.0f);*/
+        
+    levelMeterInput = juce::ImageCache::getFromMemory(BinaryData::LevelMeter1_png, BinaryData::LevelMeter1_pngSize);
+    levelMeterInput.multiplyAllAlphas(0.75f);
+    g.drawImageWithin(levelMeterInput,
+                      verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth(), //X
+                      verticalGradientMeterInput.getY(), //Y
+                      verticalGradientMeterInput.getWidth() / 2,
+                      verticalGradientMeterInput.getHeight(),
+                      juce::RectanglePlacement::stretchToFit);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
