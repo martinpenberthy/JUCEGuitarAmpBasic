@@ -209,7 +209,8 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     waveshaper3.functionToUse = [](float x)
     {
         //return x;
-        return x / (std::abs(x) + 1);
+        //return x / ((std::abs(x) * std::abs(x))  + 1);
+        return x / (std::abs(x) + 2 );
         //return (x * x) / 2.0f;
         //return std::atan(x);
     };
