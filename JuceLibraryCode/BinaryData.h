@@ -14,8 +14,14 @@ namespace BinaryData
     extern const char*   LevelMeter1_png;
     const int            LevelMeter1_pngSize = 601;
 
+    extern const char*   LevelMeterLines_png;
+    const int            LevelMeterLines_pngSize = 974;
+
+    extern const char*   LevelMeterNums_png;
+    const int            LevelMeterNums_pngSize = 2544;
+
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 2;
+    const int namedResourceListSize = 4;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];

@@ -258,13 +258,22 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
  
     g.drawLine (line, 2.0f);*/
         
-    levelMeterInput = juce::ImageCache::getFromMemory(BinaryData::LevelMeter1_png, BinaryData::LevelMeter1_pngSize);
-    levelMeterInput.multiplyAllAlphas(0.75f);
-    g.drawImageWithin(levelMeterInput,
+    levelMeterInputLines = juce::ImageCache::getFromMemory(BinaryData::LevelMeterLines_png, BinaryData::LevelMeterLines_pngSize);
+    levelMeterInputLines.multiplyAllAlphas(0.75f);
+    g.drawImageWithin(levelMeterInputLines,
                       verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth(), //X
                       verticalGradientMeterInput.getY(), //Y
-                      verticalGradientMeterInput.getWidth() / 2,
-                      verticalGradientMeterInput.getHeight(),
+                      verticalGradientMeterInput.getWidth() * 2, //Width
+                      verticalGradientMeterInput.getHeight(), //Height
+                      juce::RectanglePlacement::stretchToFit);
+    
+    levelMeterInputNums = juce::ImageCache::getFromMemory(BinaryData::LevelMeterNums_png, BinaryData::LevelMeterNums_pngSize);
+    levelMeterInputNums.multiplyAllAlphas(0.75f);
+    g.drawImageWithin(levelMeterInputNums,
+                      verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth(), //X
+                      verticalGradientMeterInput.getY(), //Y
+                      verticalGradientMeterInput.getWidth() * 2, //Width
+                      verticalGradientMeterInput.getHeight(), //Height
                       juce::RectanglePlacement::stretchToFit);
 }
 

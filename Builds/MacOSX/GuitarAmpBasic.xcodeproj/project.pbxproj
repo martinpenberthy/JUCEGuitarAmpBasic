@@ -115,8 +115,10 @@
 		A94AD3DB3CA2F952E4069C7C /* BinaryData.h */ /* BinaryData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryData.h; path = ../../JuceLibraryCode/BinaryData.h; sourceTree = SOURCE_ROOT; };
 		AA36A45F4BB95E3BEA25B97F /* include_juce_audio_processors_ara.cpp */ /* include_juce_audio_processors_ara.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_ara.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_ara.cpp; sourceTree = SOURCE_ROOT; };
 		AC6F26F823AE213EA65A8F4B /* juce_graphics */ /* juce_graphics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_graphics; path = /Applications/JUCE/modules/juce_graphics; sourceTree = "<absolute>"; };
+		AE29972C7DF8BCD0213BC896 /* LevelMeterLines.png */ /* LevelMeterLines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LevelMeterLines.png; path = ../../../../../Downloads/LevelMeterLines.png; sourceTree = SOURCE_ROOT; };
 		B4B8585586DD7E53D57EC3A0 /* include_juce_audio_processors_lv2_libs.cpp */ /* include_juce_audio_processors_lv2_libs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_lv2_libs.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_lv2_libs.cpp; sourceTree = SOURCE_ROOT; };
 		B6058E4A11E64BC6B1F57CFC /* juce_audio_plugin_client */ /* juce_audio_plugin_client */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_plugin_client; path = /Applications/JUCE/modules/juce_audio_plugin_client; sourceTree = "<absolute>"; };
+		B89DAD4179996580FD46A309 /* LevelMeterNums.png */ /* LevelMeterNums.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = LevelMeterNums.png; path = ../../../../../Downloads/LevelMeterNums.png; sourceTree = SOURCE_ROOT; };
 		B96928B1688F65C4EB647E1F /* juce_audio_formats */ /* juce_audio_formats */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_formats; path = /Applications/JUCE/modules/juce_audio_formats; sourceTree = "<absolute>"; };
 		BA273AFE397FC6C143A7D207 /* include_juce_dsp.mm */ /* include_juce_dsp.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_dsp.mm; path = ../../JuceLibraryCode/include_juce_dsp.mm; sourceTree = SOURCE_ROOT; };
 		C9FC842B6EE7CBBF4FA6A11E /* PluginEditor.h */ /* PluginEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginEditor.h; path = ../../Source/PluginEditor.h; sourceTree = SOURCE_ROOT; };
@@ -220,6 +222,8 @@
 			children = (
 				8FE197A09056C01FA8CCA90F,
 				201EA0BC084F02566FC1A659,
+				AE29972C7DF8BCD0213BC896,
+				B89DAD4179996580FD46A309,
 			);
 			name = Assets;
 			sourceTree = "<group>";

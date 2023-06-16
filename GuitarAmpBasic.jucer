@@ -8,6 +8,10 @@
       <FILE id="flpioM" name="Glitchtastic.jpg" compile="0" resource="1"
             file="../../../Downloads/Glitchtastic.jpg"/>
       <FILE id="P6hewo" name="LevelMeter1.png" compile="0" resource="1" file="../../../Downloads/LevelMeter1.png"/>
+      <FILE id="caACdm" name="LevelMeterLines.png" compile="0" resource="1"
+            file="../../../Downloads/LevelMeterLines.png"/>
+      <FILE id="ty7KdY" name="LevelMeterNums.png" compile="0" resource="1"
+            file="../../../Downloads/LevelMeterNums.png"/>
     </GROUP>
     <GROUP id="{0743106B-80D3-4CC6-3460-10808AC36CE3}" name="Source">
       <FILE id="EZt0ic" name="VerticalGradientMeter.h" compile="0" resource="0"
