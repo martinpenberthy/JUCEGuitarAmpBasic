@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-
+    Martin Penberthy
     This file contains the basic framework code for a JUCE plugin editor.
 
   ==============================================================================
@@ -155,7 +155,6 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelFilterLowGain.setText("Lows", juce::dontSendNotification);
     
     makeSliderAttachments();
-
 }
 
 GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()

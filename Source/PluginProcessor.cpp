@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-
+    Martin Penberthy
     This file contains the basic framework code for a JUCE plugin processor.
 
   ==============================================================================
@@ -46,21 +46,21 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 {
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
     
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("INPUTGAIN", "InputGain", -96.0f, 48.0f, 0.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN1", "PreGain1", 0.0f, 48.0f, 0.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN2", "PreGain2", 0.0f, 48.0f, 0.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREGAIN3", "PreGain3", 0.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"INPUTGAIN", 1}, "InputGain", -96.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREGAIN1", 1}, "PreGain1", 0.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREGAIN2", 1}, "PreGain2", 0.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREGAIN3", 1}, "PreGain3", 0.0f, 48.0f, 0.0f));
     
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("POSTGAIN", "PostGain", -96.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"POSTGAIN", 1}, "PostGain", -96.0f, 48.0f, 0.0f));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("PREEQ", "PreEQ", 1.0f, 10.0f, 5.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREEQ", 1}, "PreEQ", 1.0f, 10.0f, 5.0f));
                     
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("HIGH", "High", 0.0f, 2.0f, 1.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("MID", "Mid", 0.0f, 2.0f, 1.0f));
-    params.push_back(std::make_unique<juce::AudioParameterFloat>("LOW", "Low", 0.0f, 2.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"HIGH", 1}, "High", 0.0f, 2.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"MID", 1}, "Mid", 0.0f, 2.0f, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"LOW", 1}, "Low", 0.0f, 2.0f, 1.0f));
 
 
-    params.push_back(std::make_unique<juce::AudioParameterChoice>("TYPE1", "Type1",
+    params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {"TYPE1", 1}, "Type1",
                                                             juce::StringArray {"Tanh", "Amp2", "x/abs(x)+1", "Atan", "HalfRect",
                                                                                 "Amp1"},
                                                             1));
