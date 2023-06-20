@@ -30,6 +30,7 @@ public:
     void modeMenuChanged();
     void fileLoader();
     void setSliderProperties(juce::Slider *sliderToSet);
+    void makeSliderAttachments();
     //void updateToggleState(juce::Button* button, juce::String name);
 
 private:

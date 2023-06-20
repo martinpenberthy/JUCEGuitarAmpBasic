@@ -20,9 +20,6 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     // editor's size to whatever you need it to be.
     setSize (500, 520);
     
-    /*addAndMakeVisible(labelPlus6dBLeft);
-    labelPlus6dBLeft.setText("+6", juce::dontSendNotification);
-    labelPlus6dBLeft.attachToComponent(&verticalGradientMeterInput, false);*/
     
     addAndMakeVisible(verticalGradientMeterInput);
     addAndMakeVisible(verticalGradientMeterOutput);
@@ -157,7 +154,17 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelFilterLowGain.attachToComponent(&sliderFilterLowGain, false);
     labelFilterLowGain.setText("Lows", juce::dontSendNotification);
     
-    
+    makeSliderAttachments();
+
+}
+
+GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
+{
+}
+
+
+void GuitarAmpBasicAudioProcessorEditor::makeSliderAttachments()
+{
     sliderAttachmentInputGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "INPUTGAIN", sliderInputGain);
     
     sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
@@ -178,10 +185,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderAttachmentFilterMidGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "MID", sliderFilterMidGain);
     
     sliderAttachmentFilterLowGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "LOW", sliderFilterLowGain);
-}
-
-GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
-{
+    
 }
 
 void GuitarAmpBasicAudioProcessorEditor::timerCallback()

@@ -210,7 +210,7 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     {
         //return x;
         //return x / ((std::abs(x) * std::abs(x))  + 1);
-        return x / (std::abs(x) + 2 );
+        return x / (std::abs(x) + 2);
         //return (x * x) / 2.0f;
         //return std::atan(x);
     };
