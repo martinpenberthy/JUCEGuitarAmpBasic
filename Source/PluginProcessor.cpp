@@ -61,7 +61,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 
 
     params.push_back(std::make_unique<juce::AudioParameterChoice>("TYPE1", "Type1",
-                                                            juce::StringArray {"Tanh", "AmpTest", "x/abs(x)+1", "Atan", "HalfRect",
+                                                            juce::StringArray {"Tanh", "Amp2", "x/abs(x)+1", "Atan", "HalfRect",
                                                                                 "Amp1"},
                                                             1));
     return {params.begin(), params.end()};
@@ -147,21 +147,6 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     spec.numChannels = getTotalNumOutputChannels();
     reset();
     
-    /*juce::Value restoreWaveshapeFunction = treeState.getParameterAsValue("TYPE1");
-    
-    std::string restoreWaveshapeFunctionString = restoreWaveshapeFunction.getValue().toString().toStdString();
-    setFunctionToUse(restoreWaveshapeFunctionString);
-    waveshapeFunction = restoreWaveshapeFunctionString;*/
-    
-    //Set up waveshaper
-    /*auto &waveshaper1 = processorChain.get<waveshaperIndex1>();
-    waveshaper1.functionToUse = [](float x)
-    {   
-        return x / (std::abs(x) + 1);
-    };
-    waveshapeFunctionCurrent = "x/abs(x)+1";
-    waveshapeFunction = "x/abs(x)+1";*/
-    
     auto waveshapeInitFunction = treeState.getRawParameterValue("TYPE1");
     switch((int)*waveshapeInitFunction){
         case 1:
@@ -169,8 +154,8 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
             waveshapeFunction = "Tanh";
             break;
         case 2:
-            setFunctionToUse("AmpTest");
-            waveshapeFunction = "AmpTest";
+            setFunctionToUse("Amp2");
+            waveshapeFunction = "Amp2";
             break;
         case 3:
             setFunctionToUse("x/abs(x)+1");
@@ -503,7 +488,7 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
         };
         waveshapeFunctionCurrent = "x/abs(x)+1";
     }
-    else if(func == "AmpTest")
+    else if(func == "Amp2")
     {
         waveshaper1.functionToUse = [](float x)
         {
@@ -514,7 +499,7 @@ void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
             //return ((x / (std::abs(x) + param) * 1.5f ) / (x * x + (0.0f - 1.0f) * std::abs(x) + 1.0f)) * 0.7f;
             //return std::tan(x / 1.0f);
         };
-        waveshapeFunctionCurrent = "AmpTest";
+        waveshapeFunctionCurrent = "Amp2";
     }
     else if(func == "Atan")
     {

@@ -41,7 +41,7 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelWaveshapeType1.setColour(juce::Label::textColourId, juce::Colours::white);
     labelWaveshapeType1.setText("Dist Type", juce::dontSendNotification);
     waveshapeType1.addItem("Tanh", 1);
-    waveshapeType1.addItem("AmpTest", 2);
+    waveshapeType1.addItem("Amp2", 2);
     waveshapeType1.addItem("x/abs(x)+1", 3);
     waveshapeType1.addItem("Atan", 4);
     waveshapeType1.addItem("HalfRect", 5);
@@ -330,7 +330,7 @@ void GuitarAmpBasicAudioProcessorEditor::modeMenuChanged()
             audioProcessor.waveshapeFunction = "Tanh";
             break;
         case 2:
-            audioProcessor.waveshapeFunction = "AmpTest";
+            audioProcessor.waveshapeFunction = "Amp2";
             break;
         case 3:
             audioProcessor.waveshapeFunction = "x/abs(x)+1";
