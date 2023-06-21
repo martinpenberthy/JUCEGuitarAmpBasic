@@ -44,8 +44,8 @@ public:
         bounds.setWidth(40);s
         bounds.setHeight(25);*/
         
-        g.setFont (14.0f);
-        g.drawText(std::to_string(level), 100.0f, 100.0f, 40.0f, 20.0f, juce::Justification::centred, true);
+        /*g.setFont (30.0f);
+        g.drawText(std::to_string(level), 250.0f, 260.0f, 100.0f, 100.0f, juce::Justification::centred, true);*/
     }
     
     void resized() override
