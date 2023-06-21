@@ -261,7 +261,7 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
  
     g.drawLine (line, 2.0f);*/
         
-    levelMeterInputLines = juce::ImageCache::getFromMemory(BinaryData::LevelMeterLines_png, BinaryData::LevelMeterLines_pngSize);
+   /* levelMeterInputLines = juce::ImageCache::getFromMemory(BinaryData::LevelMeterLines_png, BinaryData::LevelMeterLines_pngSize);
     levelMeterInputLines.multiplyAllAlphas(0.75f);
     g.drawImageWithin(levelMeterInputLines,
                       verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth(), //X
@@ -277,12 +277,12 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
                       verticalGradientMeterInput.getY(), //Y
                       verticalGradientMeterInput.getWidth() * 2, //Width
                       verticalGradientMeterInput.getHeight(), //Height
-                      juce::RectanglePlacement::stretchToFit);
+                      juce::RectanglePlacement::stretchToFit);*/
 }
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
 {
-    int meterWidth = 15;
+    int meterWidth = 20;
     int meterHeight = 510;
     int meterX = 5;
     int meterY = 5;
