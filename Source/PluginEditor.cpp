@@ -63,23 +63,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelInputGain.attachToComponent(&sliderInputGain, false);
     labelInputGain.setText("InputGain(dB)", juce::dontSendNotification);
     
-    /*sliderInputGain.onValueChange = [this]()
-    {
-        audioProcessor.inputGainVal = sliderInputGain.getValue();
-    };*/
-    
-    
     addAndMakeVisible(sliderPreGain1);
     
     setSliderProperties(&sliderPreGain1);
     sliderPreGain1.setLookAndFeel(&lookAndFeel);
     labelPreGain1.attachToComponent(&sliderPreGain1, false);
     labelPreGain1.setText("PreGain1(dB)", juce::dontSendNotification);
-    
-    /*sliderPreGain1.onValueChange = [this]()
-    {
-        audioProcessor.preGainVal1 = sliderPreGain1.getValue();
-    };*/
     
     addAndMakeVisible(sliderPreGain2);
     
@@ -88,24 +77,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelPreGain2.attachToComponent(&sliderPreGain2, false);
     labelPreGain2.setText("PreGain2(dB)", juce::dontSendNotification);
     
-    /*sliderPreGain2.onValueChange = [this]()
-    {
-        audioProcessor.preGainVal2 = sliderPreGain2.getValue();
-    };*/
-    
-    
     addAndMakeVisible(sliderPreGain3);
     
     setSliderProperties(&sliderPreGain3);
     sliderPreGain3.setLookAndFeel(&lookAndFeel);
     labelPreGain3.attachToComponent(&sliderPreGain3, false);
     labelPreGain3.setText("PreGain3(dB)", juce::dontSendNotification);
-    
-    /*sliderPreGain3.onValueChange = [this]()
-    {
-        audioProcessor.preGainVal3 = sliderPreGain3.getValue();
-    };*/
-    
     
     addAndMakeVisible(sliderPostGain);
     
@@ -114,23 +91,12 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     labelPostGain.attachToComponent(&sliderPostGain, false);
     labelPostGain.setText("PostGain(dB)", juce::dontSendNotification);
     
-    /*sliderPostGain.onValueChange = [this]()
-    {
-        audioProcessor.postGainVal = sliderPostGain.getValue();
-    };*/
-    
-    
     addAndMakeVisible(sliderPreEQ);
     
     setSliderProperties(&sliderPreEQ);
     sliderPreEQ.setLookAndFeel(&lookAndFeel);
     labelPreEQ.attachToComponent(&sliderPreEQ, false);
     labelPreEQ.setText("PreEQ", juce::dontSendNotification);
-    
-    /*sliderPreEQ.onValueChange = [this]()
-    {
-        audioProcessor.preEQVal = sliderPreEQ.getValue();
-    };*/
 
     addAndMakeVisible(sliderFilterHighGain);
     
@@ -138,7 +104,6 @@ GuitarAmpBasicAudioProcessorEditor::GuitarAmpBasicAudioProcessorEditor (GuitarAm
     sliderFilterHighGain.setLookAndFeel(&lookAndFeel);
     labelFilterHighGain.attachToComponent(&sliderFilterHighGain, false);
     labelFilterHighGain.setText("Highs", juce::dontSendNotification);
-    
     
     addAndMakeVisible(sliderFilterMidGain);
     
@@ -165,26 +130,18 @@ GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
 void GuitarAmpBasicAudioProcessorEditor::makeSliderAttachments()
 {
     sliderAttachmentInputGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "INPUTGAIN", sliderInputGain);
-    
-    sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
-    
-    sliderAttachmentPreGain2 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN2", sliderPreGain2);
-    
-    sliderAttachmentPreGain3 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN3", sliderPreGain3);
-    
-    
     sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "POSTGAIN", sliderPostGain);
-    
     sliderAttachmentPreEQ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREEQ", sliderPreEQ);
     
-    comboAttachmentWaveshapeType1 = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, "TYPE1", waveshapeType1);
+    sliderAttachmentPreGain1 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN1", sliderPreGain1);
+    sliderAttachmentPreGain2 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN2", sliderPreGain2);
+    sliderAttachmentPreGain3 = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREGAIN3", sliderPreGain3);
     
     sliderAttachmentFilterHighGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "HIGH", sliderFilterHighGain);
-    
     sliderAttachmentFilterMidGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "MID", sliderFilterMidGain);
-    
     sliderAttachmentFilterLowGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "LOW", sliderFilterLowGain);
     
+    comboAttachmentWaveshapeType1 = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(audioProcessor.treeState, "TYPE1", waveshapeType1);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::timerCallback()
@@ -288,9 +245,7 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     int meterY = 5;
     verticalGradientMeterInput.setBounds(meterX, meterY, meterWidth, meterHeight);
     verticalGradientMeterOutput.setBounds(getWidth() - (verticalGradientMeterInput.getWidth() + verticalGradientMeterInput.getX()), meterY, meterWidth, meterHeight);
-    
-    //labelPlus6dBLeft.setBounds(/*verticalGradientMeterInput.getX() + meterWidth*/getWidth() / 2, getHeight() / 2, 25, 25);
-    
+        
     int leftOffest = 60;
     int topOffset = 40;
     int knobSize = 125;

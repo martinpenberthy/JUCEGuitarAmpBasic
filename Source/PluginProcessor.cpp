@@ -19,7 +19,7 @@ GuitarAmpBasicAudioProcessor::GuitarAmpBasicAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       ), treeState(*this, nullptr, juce::Identifier("PARAMETERS"), createParameterLayout())//, filterHigh(juce::dsp::IIR::Coefficients<float>::makePeakFilter(44100, 9000.0f, 0.1f, 1.0f))
+                       ), treeState(*this, nullptr, juce::Identifier("PARAMETERS"), createParameterLayout())
 #endif
 {
     variableTree =
@@ -46,20 +46,24 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
 {
     std::vector <std::unique_ptr<juce::RangedAudioParameter>> params;
     
+    //Input and Output parameters
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"INPUTGAIN", 1}, "InputGain", -96.0f, 48.0f, 0.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"POSTGAIN", 1}, "PostGain", -96.0f, 48.0f, 0.0f));
+    
+    //PreEQ
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREEQ", 1}, "PreEQ", 1.0f, 10.0f, 5.0f));
+    
+    //Pregains
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREGAIN1", 1}, "PreGain1", 0.0f, 48.0f, 0.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREGAIN2", 1}, "PreGain2", 0.0f, 48.0f, 0.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREGAIN3", 1}, "PreGain3", 0.0f, 48.0f, 0.0f));
-    
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"POSTGAIN", 1}, "PostGain", -96.0f, 48.0f, 0.0f));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"PREEQ", 1}, "PreEQ", 1.0f, 10.0f, 5.0f));
-                    
+    //EQ
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"HIGH", 1}, "High", 0.0f, 2.0f, 1.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"MID", 1}, "Mid", 0.0f, 2.0f, 1.0f));
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"LOW", 1}, "Low", 0.0f, 2.0f, 1.0f));
 
-
+    //Dist type
     params.push_back(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID {"TYPE1", 1}, "Type1",
                                                             juce::StringArray {"Tanh", "Amp2", "x/abs(x)+1", "Atan", "HalfRect",
                                                                                 "Amp1"},
@@ -200,24 +204,19 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
         //return std::atan(x);
     };
     
-    //inputGainVal = *treeState.getRawParameterValue("INPUTGAIN");
-    //postGainVal = *treeState.getRawParameterValue("POSTGAIN");
     
     inputGain.setGainDecibels(*treeState.getRawParameterValue("INPUTGAIN"));
     outputGain.setGainDecibels(*treeState.getRawParameterValue("POSTGAIN"));
     
     
-    //Set up pre and post gain
+    //Set up pre gains
     auto &preGain1 = processorChain.get<preGainIndex1>();
-    //preGainVal1 = *treeState.getRawParameterValue("PREGAIN1");
     preGain1.setGainDecibels(*treeState.getRawParameterValue("PREGAIN1"));
     
     auto &preGain2 = processorChain.get<preGainIndex2>();
-    //preGainVal2 = *treeState.getRawParameterValue("PREGAIN2");
     preGain2.setGainDecibels(*treeState.getRawParameterValue("PREGAIN2"));
     
     auto &preGain3 = processorChain.get<preGainIndex3>();
-    //preGainVal3 = *treeState.getRawParameterValue("PREGAIN3");
     preGain3.setGainDecibels(*treeState.getRawParameterValue("PREGAIN3"));
     
     
@@ -229,22 +228,14 @@ void GuitarAmpBasicAudioProcessor::prepareToPlay (double sampleRate, int samples
     preEQ.setCutoffFrequencyHz(*treeState.getRawParameterValue("PREEQ") * 1000.0f);
     preEQ.setDrive(1.0f);
     
-    
+    //Set up internal low shelf
     auto &lowEQ = processorChain.get<lowEQIndex>();
     *lowEQ.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, 400.0f, 0.4f, 0.1f);
     
-    
-    /*auto &filterHigh = processorChain.get<filterHighIndex>();
-    *filterHigh.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 5000.0f, 0.6f, treeState.getRawParameterValue("HIGH")->load());
-    
-    auto &filterMid = processorChain.get<filterMidIndex>();
-    *filterMid.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 500.0f, 0.9f, treeState.getRawParameterValue("MID")->load());
-    
-    auto &filterLow = processorChain.get<filterLowIndex>();
-    *filterLow.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter (sampleRate, 100.0f, 0.6f, treeState.getRawParameterValue("LOW")->load());*/
+    //Prepare EQ filters
     updateFilter();
 
-    
+    //Prepare chain
     processorChain.prepare(spec);
 
     //Prepare convolution
@@ -291,7 +282,10 @@ bool GuitarAmpBasicAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 }
 #endif
 
-
+/*
+    This function gets the current parameter values for the high, mid and low
+    EQs, creates new filter with new values and set the state
+ */
 void GuitarAmpBasicAudioProcessor::updateFilter()
 {
     float gainHigh = *treeState.getRawParameterValue("HIGH");
@@ -334,9 +328,12 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     //Set and process input gain
     inputGain.setGainDecibels(*treeState.getRawParameterValue("INPUTGAIN"));
     
+    //Process context replacing
     juce::dsp::AudioBlock<float> inputGainBlock (buffer);
     inputGain.process(juce::dsp::ProcessContextReplacing<float>(inputGainBlock));
     
+    
+    /*********Set input meter values*********/
     //Set val for input level meter
     isInput = true;
     rmsLevelInput.skip(buffer.getNumSamples());
@@ -346,6 +343,7 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         rmsLevelInput.setTargetValue(valueIn);
     else
         rmsLevelInput.setCurrentAndTargetValue(valueIn);
+    
     
     //Set values for pre gains
     auto &preGain1 = processorChain.get<preGainIndex1>();
@@ -363,14 +361,14 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     
     updateFilter();
     
-    
-    //Process waveshaper chain
+    //Process waveshaper chain context replacing
     juce::dsp::AudioBlock<float> processorChainBlock (buffer);
     processorChain.process(juce::dsp::ProcessContextReplacing<float>(processorChainBlock));
     
     //Process convolver
     juce::dsp::AudioBlock<float> convolverBlock (buffer);
     
+    //If there is an IR loaded, process it
     if(irLoader.getCurrentIRSize() > 0)
         irLoader.process(juce::dsp::ProcessContextReplacing<float>(convolverBlock));
     
@@ -379,7 +377,7 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     juce::dsp::AudioBlock<float> outputGainBlock (buffer);
     outputGain.process(juce::dsp::ProcessContextReplacing<float>(outputGainBlock));
     
-    
+    /*********Set output meter values*********/
     //Set val for output level meter
     rmsLevelOutput.skip(buffer.getNumSamples());
     isInput = false;
@@ -397,9 +395,11 @@ void GuitarAmpBasicAudioProcessor::reset()
 {
     processorChain.reset();
     irLoader.reset(); // [3]
-    //filterHigh.reset();
 }
-    
+
+/*
+    This function returns the current RMS input level
+ */
 float GuitarAmpBasicAudioProcessor::getRMSValueInput(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
@@ -410,6 +410,9 @@ float GuitarAmpBasicAudioProcessor::getRMSValueInput(const int channel) const
     return 0;
 }
 
+/*
+    This function returns the current RMS output level
+ */
 float GuitarAmpBasicAudioProcessor::getRMSValueOutput(const int channel) const
 {
     jassert(channel == 0 || channel == 1);
@@ -437,10 +440,6 @@ void GuitarAmpBasicAudioProcessor::getStateInformation (juce::MemoryBlock& destD
     treeState.state.appendChild(variableTree, nullptr);
     juce::MemoryOutputStream stream(destData, false);
     treeState.state.writeToStream(stream);
-    /*auto state = treeState.copyState();
-    std::unique_ptr<juce::XmlElement> xml (state.createXml());
-    copyXmlToBinary (*xml, destData);*/
-    
 
 }
 
@@ -459,15 +458,12 @@ void GuitarAmpBasicAudioProcessor::setStateInformation (const void* data, int si
         irLoader.loadImpulseResponse(savedFile, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
     }
     
-    /*std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-
-    if (xmlState.get() != nullptr)
-        if (xmlState->hasTagName (treeState.state.getType()))
-            treeState.replaceState (juce::ValueTree::fromXml (*xmlState));*/
 }
     
-
-
+/*
+    This function takes a string corresponding to the waveshaping function
+    to be used. It then sets the functionToUse lambda in the waveshaper.
+ */
 void GuitarAmpBasicAudioProcessor::setFunctionToUse(std::string func)
 {
     auto &waveshaper1 = processorChain.get<waveshaperIndex1>();

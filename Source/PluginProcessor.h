@@ -74,23 +74,12 @@ public:
     std::string waveshapeFunctionCurrent;
     
     bool isInput;
-    /*float inputGainVal {0.0f};
-    
-    float preEQVal {5.0f};
-    float preGainVal1 {0.0f};
-    float preGainVal2 {0.0f};
-    float preGainVal3 {0.0f};
-    
-    float postGainVal {0.0f};*/ 
 
-    //juce::dsp::LadderFilterMode filterMode;
-    
     juce::File root, savedFile;
     juce::dsp::Convolution irLoader;
 private:
     enum
     {
-        //inputGainIndex,
         preEQIndex,
         lowEQIndex,
         preGainIndex1,
@@ -101,8 +90,7 @@ private:
         waveshaperIndex3,
         filterLowIndex,
         filterMidIndex,
-        filterHighIndex//,
-        //postGainIndex
+        filterHighIndex
     };
     
     using IIRFilter = juce::dsp::IIR::Filter<float>;
@@ -110,8 +98,7 @@ private:
     
     juce::dsp::Gain<float> inputGain;
     
-    juce::dsp::ProcessorChain<//juce::dsp::Gain<float>,
-                              juce::dsp::LadderFilter<float>, //PreEQ
+    juce::dsp::ProcessorChain<juce::dsp::LadderFilter<float>, //PreEQ
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>, //LowEQ
                               juce::dsp::Gain<float>, //Pregain1
                               juce::dsp::WaveShaper<float>, //Waveshaper1
@@ -122,12 +109,10 @@ private:
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>,
                               juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>
-                              /*,juce::dsp::Gain<float>*/> processorChain;
+                              > processorChain;
     
     juce::dsp::Gain<float> outputGain;
     
-    
-    //juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> filterHigh;
     juce::dsp::ProcessSpec spec;
     juce::LinearSmoothedValue<float> rmsLevelInput;
     juce::LinearSmoothedValue<float> rmsLevelOutput;
