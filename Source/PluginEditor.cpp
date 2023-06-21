@@ -282,8 +282,8 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
 {
-    int meterWidth = 20;
-    int meterHeight = 510;
+    int meterWidth = 15;
+    int meterHeight = 500;
     int meterX = 5;
     int meterY = 5;
     verticalGradientMeterInput.setBounds(meterX, meterY, meterWidth, meterHeight);

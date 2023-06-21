@@ -36,14 +36,16 @@ public:
         const auto scaledY = juce::jmap(level, -60.0f, 6.0f, 0.0f, static_cast<float>(getHeight()));
         g.fillRect(bounds.removeFromBottom(scaledY));
         
-        //auto currLevelBounds = new juce::Rectangle<float>(100.0f, 100.0f, 40.0f, 20.0f);
-        bounds.setX(100);
+        auto currLevelBounds = getLocalBounds().toFloat();
+        currLevelBounds.setX(currLevelBounds.getX() + 100);
+        //new juce::Rectangle<float>(100.0f, 100.0f, 40.0f, 20.0f);
+        /*bounds.setX(100);
         bounds.setY(100);
-        bounds.setWidth(40);
-        bounds.setHeight(25);
+        bounds.setWidth(40);s
+        bounds.setHeight(25);*/
         
         g.setFont (14.0f);
-        g.drawText(std::to_string(level), bounds, juce::Justification::centred, true);
+        g.drawText(std::to_string(level), 100.0f, 100.0f, 40.0f, 20.0f, juce::Justification::centred, true);
     }
     
     void resized() override
