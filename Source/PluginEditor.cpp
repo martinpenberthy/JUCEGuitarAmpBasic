@@ -207,7 +207,7 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
        
     backgroundImage = juce::ImageCache::getFromMemory(BinaryData::_Logos_Final2_alpha_png, BinaryData::_Logos_Final2_alpha_pngSize);
-    g.drawImageWithin(backgroundImage, 0, -150, getWidth() / 2, getHeight() / 2, juce::RectanglePlacement::centred);
+    g.drawImageWithin(backgroundImage, 120, -80, getWidth() / 2, getHeight() / 2, juce::RectanglePlacement::centred);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
@@ -227,11 +227,11 @@ void GuitarAmpBasicAudioProcessorEditor::resized()
     int row3Y = 400;
     
     //IR load button/label
-    loadButton.setBounds(leftOffest, topOffset, 100, 25);
+    loadButton.setBounds(leftOffest - 10, topOffset, 100, 25);
     irName.setBounds(loadButton.getX(), loadButton.getY() - 20, 175, 25);
     
     //Waveshape menu
-    waveshapeType1.setBounds(getWidth() - (loadButton.getWidth() + leftOffest + 10), topOffset, 100, 25);
+    waveshapeType1.setBounds(getWidth() - (loadButton.getWidth() + leftOffest), topOffset, 100, 25);
     
     //Top row
     sliderInputGain.setBounds(loadButton.getX(), row1Y, knobSize, knobSize);
