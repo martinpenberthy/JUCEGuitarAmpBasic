@@ -48,6 +48,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout GuitarAmpBasicAudioProcessor
     
     //Input and Output parameters
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"INPUTGAIN", 1}, "InputGain", -96.0f, 48.0f, 0.0f));
+    
+    
+    
+    
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID {"POSTGAIN", 1}, "PostGain", -96.0f, 48.0f, 0.0f));
     
     //PreEQ
@@ -330,7 +334,9 @@ void GuitarAmpBasicAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     
     //Process context replacing
     juce::dsp::AudioBlock<float> inputGainBlock (buffer);
-    inputGain.process(juce::dsp::ProcessContextReplacing<float>(inputGainBlock));
+    juce::dsp::ProcessContextReplacing<float> inputContextReplacing (inputGainBlock);
+    
+    inputGain.process(inputContextReplacing);
     
     
     /*********Set input meter values*********/

@@ -130,6 +130,19 @@ GuitarAmpBasicAudioProcessorEditor::~GuitarAmpBasicAudioProcessorEditor()
 void GuitarAmpBasicAudioProcessorEditor::makeSliderAttachments()
 {
     sliderAttachmentInputGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "INPUTGAIN", sliderInputGain);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "POSTGAIN", sliderPostGain);
     sliderAttachmentPreEQ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREEQ", sliderPreEQ);
     
