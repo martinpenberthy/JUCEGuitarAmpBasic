@@ -45,6 +45,7 @@ private:
     
     juce::TextButton loadButton;
     juce::Label irName;
+    juce::Image backgroundImage;
     
     std::unique_ptr<juce::FileChooser> fileChooser;
     

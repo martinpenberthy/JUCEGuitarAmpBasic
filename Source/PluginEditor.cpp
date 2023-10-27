@@ -131,18 +131,6 @@ void GuitarAmpBasicAudioProcessorEditor::makeSliderAttachments()
 {
     sliderAttachmentInputGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "INPUTGAIN", sliderInputGain);
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     sliderAttachmentPostGain = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "POSTGAIN", sliderPostGain);
     sliderAttachmentPreEQ = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.treeState, "PREEQ", sliderPreEQ);
     
@@ -217,37 +205,9 @@ void GuitarAmpBasicAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-    
-    /*testImage = juce::ImageCache::getFromMemory(BinaryData::Glitchtastic_jpg, BinaryData::Glitchtastic_jpgSize);
-    g.drawImageWithin(testImage, 0, 0, getWidth(), getHeight(), juce::RectanglePlacement::stretchToFit);*/
-     
-    /*g.setColour (juce::Colours::whitesmoke.withAlpha(0.25f));
- 
-    float lineLength = 15.0f;
-    juce::Line<float> line (juce::Point<float> (verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth(),
-                                                verticalGradientMeterInput.getY() + lineLength),
-                            juce::Point<float> (verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth() + lineLength,
-                                                verticalGradientMeterInput.getY() + lineLength));
- 
-    g.drawLine (line, 2.0f);*/
-        
-   /* levelMeterInputLines = juce::ImageCache::getFromMemory(BinaryData::LevelMeterLines_png, BinaryData::LevelMeterLines_pngSize);
-    levelMeterInputLines.multiplyAllAlphas(0.75f);
-    g.drawImageWithin(levelMeterInputLines,
-                      verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth(), //X
-                      verticalGradientMeterInput.getY(), //Y
-                      verticalGradientMeterInput.getWidth() * 2, //Width
-                      verticalGradientMeterInput.getHeight(), //Height
-                      juce::RectanglePlacement::stretchToFit);
-    
-    levelMeterInputNums = juce::ImageCache::getFromMemory(BinaryData::LevelMeterNums_png, BinaryData::LevelMeterNums_pngSize);
-    levelMeterInputNums.multiplyAllAlphas(0.75f);
-    g.drawImageWithin(levelMeterInputNums,
-                      verticalGradientMeterInput.getX() + verticalGradientMeterInput.getWidth(), //X
-                      verticalGradientMeterInput.getY(), //Y
-                      verticalGradientMeterInput.getWidth() * 2, //Width
-                      verticalGradientMeterInput.getHeight(), //Height
-                      juce::RectanglePlacement::stretchToFit);*/
+       
+    backgroundImage = juce::ImageCache::getFromMemory(BinaryData::_Logos_Final2_alpha_png, BinaryData::_Logos_Final2_alpha_pngSize);
+    g.drawImageWithin(backgroundImage, 0, -150, getWidth() / 2, getHeight() / 2, juce::RectanglePlacement::centred);
 }
 
 void GuitarAmpBasicAudioProcessorEditor::resized()
